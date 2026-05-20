@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Agros Solar Pump Savings Calculator</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f5f5f3; color: #1a1a1a; padding: 1.5rem; font-size: 14px; }
+.wrap { max-width: 740px; margin: 0 auto; }
+.header { display: flex; align-items: center; gap: 10px; margin-bottom: 1.5rem; }
+.dot { width: 10px; height: 10px; border-radius: 50%; background: #106A37; flex-shrink: 0; }
+.header-title { font-size: 16px; font-weight: 500; }
+.header-sub { font-size: 13px; color: #666; }
+.section { background: #fff; border: 0.5px solid #ddd; border-radius: 12px; padding: 1.25rem; margin-bottom: 1rem; }
+.section-title { font-size: 11px; font-weight: 600; color: #888; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 1rem; }
+.section-sub { font-size: 12px; color: #999; margin-bottom: 1rem; margin-top: -6px; }
+.field-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.field { display: flex; flex-direction: column; gap: 5px; }
+.field label { font-size: 13px; color: #555; font-weight: 500; }
+.field input, .field select { width: 100%; padding: 7px 10px; border: 0.5px solid #ccc; border-radius: 8px; font-size: 14px; background: #fff; color: #1a1a1a; }
+.field input:focus, .field select:focus { outline: none; border-color: #106A37; }
+.field input[readonly] { background: #f5f5f3; color: #666; }
+.field .hint { font-size: 11px; color: #aaa; line-height: 1.5; }
+.field .hint.source { color: #106A37; font-style: italic; }
+.field .hint.warning { color: #E55A26; }
+.pump-info-bar { display: flex; gap: 20px; flex-wrap: wrap; margin-top: 10px; padding: 10px 14px; background: #f0f7f3; border-radius: 8px; border: 0.5px solid #c8e6d4; }
+.pump-info-item { display: flex; flex-direction: column; gap: 2px; }
+.pump-info-label { font-size: 11px; color: #666; }
+.pump-info-value { font-size: 14px; font-weight: 500; color: #106A37; }
+.comp-info-bar { display: flex; gap: 0; flex-wrap: wrap; margin-top: 12px; padding: 12px 14px; background: #fff8f5; border-radius: 8px; border: 0.5px solid #f0c4b0; gap: 16px; }
+.comp-info-item { display: flex; flex-direction: column; gap: 2px; }
+.comp-info-label { font-size: 11px; color: #999; }
+.comp-info-value { font-size: 13px; font-weight: 500; color: #c04a1a; }
+.comp-info-note { font-size: 10px; color: #aaa; margin-top: 2px; line-height: 1.4; }
+.toggle-row { display: flex; gap: 8px; margin-bottom: 1rem; }
+.toggle-btn { flex: 1; padding: 8px; font-size: 14px; border: 0.5px solid #ccc; border-radius: 8px; background: transparent; color: #666; cursor: pointer; transition: all 0.15s; }
+.toggle-btn.active { background: #e8f5ee; color: #106A37; border-color: #106A37; font-weight: 500; }
+.calc-btn { width: 100%; padding: 13px; font-size: 15px; font-weight: 500; background: #106A37; color: #fff; border: none; border-radius: 10px; cursor: pointer; margin-bottom: 1rem; }
+.calc-btn:hover { background: #0d5a2f; }
+.result-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px; }
+.metric { background: #f5f5f3; border-radius: 8px; padding: 0.9rem; }
+.metric-label { font-size: 12px; color: #666; margin-bottom: 5px; line-height: 1.4; }
+.metric-value { font-size: 20px; font-weight: 500; }
+.metric-sub { font-size: 11px; color: #999; margin-top: 3px; }
+.metric.green { background: #e8f5ee; }
+.metric.green .metric-label { color: #106A37; }
+.metric.green .metric-value { color: #106A37; }
+.metric.orange { background: #fdf0ea; }
+.metric.orange .metric-label { color: #E55A26; }
+.metric.orange .metric-value { color: #E55A26; }
+.divider { border: none; border-top: 0.5px solid #eee; margin: 1rem 0; }
+.waste-row { margin-bottom: 14px; }
+.waste-row-header { display: flex; justify-content: space-between; font-size: 12px; color: #666; margin-bottom: 5px; }
+.waste-bar-bg { height: 30px; background: #f5f5f3; border-radius: 8px; overflow: hidden; display: flex; }
+.bar-useful { background: #106A37; height: 100%; display: flex; align-items: center; justify-content: center; font-size: 11px; color: #fff; font-weight: 500; overflow: hidden; transition: width 0.4s; }
+.bar-waste { background: #E55A26; height: 100%; display: flex; align-items: center; justify-content: center; font-size: 11px; color: #fff; font-weight: 500; overflow: hidden; transition: width 0.4s; }
+.bar-zero { background: #e8f5ee; height: 100%; display: flex; align-items: center; padding: 0 12px; font-size: 12px; color: #106A37; width: 100%; font-weight: 500; }
+.waste-labels { display: flex; justify-content: space-between; margin-top: 4px; }
+.waste-useful-lbl { font-size: 11px; color: #106A37; }
+.waste-waste-lbl { font-size: 11px; color: #E55A26; }
+.legend { display: flex; gap: 16px; margin-top: 10px; flex-wrap: wrap; }
+.legend-item { display: flex; align-items: center; gap: 5px; font-size: 11px; color: #666; }
+.legend-dot { width: 10px; height: 10px; border-radius: 2px; }
+.flow-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
+.formula-note { font-size: 11px; color: #aaa; margin-top: 10px; line-height: 1.6; }
+.badge { font-size: 11px; padding: 2px 8px; border-radius: 6px; background: #e6f1fb; color: #185fa5; margin-left: 6px; }
+.research-tag { font-size: 10px; padding: 1px 6px; border-radius: 4px; background: #f0f7f3; color: #106A37; border: 0.5px solid #c8e6d4; margin-left: 6px; vertical-align: middle; }
+.om-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 12px; padding-top: 12px; border-top: 0.5px solid #eee; }
+.om-label { font-size: 12px; color: #888; margin-bottom: 8px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.04em; grid-column: 1 / -1; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="header">
+    <div class="dot"></div>
+    <div>
+      <div class="header-title">Solar pump savings calculator</div>
+      <div class="header-sub">Agrosolar / Agrosolpump — sales tool v3</div>
+    </div>
+  </div>
+
+  <!-- AGROS PUMP -->
+  <div class="section">
+    <div class="section-title">Agros pump</div>
+    <div class="field">
+      <label>Select pump model</label>
+      <select id="pump-select" onchange="onPumpSelect()">
+        <option value="">— Select a model —</option>
+        <optgroup label="PowerFlow">
+          <option value="PF5.5">PowerFlow 5.5</option>
+          <option value="PF5.5HP">PowerFlow 5.5-HP</option>
+          <option value="PF7.5">PowerFlow 7.5</option>
+          <option value="PF10">PowerFlow 10</option>
+          <option value="PF10HP">PowerFlow 10-HP</option>
+          <option value="PF15">PowerFlow 15</option>
+          <option value="PF15HP">PowerFlow 15-HP</option>
+        </optgroup>
+        <optgroup label="DeepFlow">
+          <option value="DF5.5-31">DeepFlow 5.5-31</option>
+          <option value="DF5.5-55">DeepFlow 5.5-55</option>
+          <option value="DF7.5-23">DeepFlow 7.5-23</option>
+          <option value="DF7.5-48">DeepFlow 7.5-48</option>
+          <option value="DF10-40">DeepFlow 10-40</option>
+          <option value="DF10-61">DeepFlow 10-61</option>
+          <option value="DF15-47">DeepFlow 15-47</option>
+          <option value="DF15-99">DeepFlow 15-99</option>
+        </optgroup>
+      </select>
+    </div>
+    <div id="pump-info-bar" class="pump-info-bar" style="display:none;">
+      <div class="pump-info-item"><div class="pump-info-label">Rated power</div><div class="pump-info-value" id="info-hp">—</div></div>
+      <div class="pump-info-item"><div class="pump-info-label">Peak efficiency</div><div class="pump-info-value" id="info-eff">—</div></div>
+      <div class="pump-info-item"><div class="pump-info-label">Optimum flow</div><div class="pump-info-value" id="info-flow">—</div></div>
+      <div class="pump-info-item"><div class="pump-info-label">Variant</div><div class="pump-info-value" id="info-variant">—</div></div>
+    </div>
+  </div>
+
+  <!-- OPERATION -->
+  <div class="section">
+    <div class="section-title">Operation</div>
+    <div class="field-grid">
+      <div class="field">
+        <label>Daily run hours (hrs/day)</label>
+        <input type="number" id="hours" value="6" min="1" max="24" step="0.5">
+      </div>
+      <div class="field">
+        <label>Operating days per year</label>
+        <input type="number" id="days" value="200" min="1" max="365">
+      </div>
+    </div>
+  </div>
+
+  <!-- COMPETITOR -->
+  <div class="section">
+    <div class="section-title">Competitor pump</div>
+    <div class="toggle-row">
+      <button class="toggle-btn active" id="btn-diesel" onclick="setMode('diesel')">Diesel pump</button>
+      <button class="toggle-btn" id="btn-grid" onclick="setMode('grid')">Grid pump</button>
+    </div>
+
+    <!-- Diesel type selector -->
+    <div id="diesel-type-wrap">
+      <div class="field" style="margin-bottom:12px;">
+        <label>Pump type <span class="research-tag">research-based</span></label>
+        <select id="diesel-type" onchange="onCompTypeChange()">
+          <option value="">— Select pump type —</option>
+          <option value="yanmar">Yanmar / Kubota (branded)</option>
+          <option value="chinese">Chinese clone / no-name</option>
+          <option value="generic_diesel">Unknown / generic diesel</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Grid type selector -->
+    <div id="grid-type-wrap" style="display:none;">
+      <div class="field" style="margin-bottom:12px;">
+        <label>Pump type <span class="research-tag">research-based</span></label>
+        <select id="grid-type" onchange="onCompTypeChange()">
+          <option value="">— Select pump type —</option>
+          <option value="branded_elec">Branded — Grundfos / Ebara / DAB</option>
+          <option value="midmarket_elec">Mid-market — CNP / Pedrollo / Panasonic</option>
+          <option value="lowcost_elec">Low-cost / Chinese domestic (IE1 motor)</option>
+          <option value="generic_elec">Unknown / generic electric</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Auto-populated competitor info bar -->
+    <div id="comp-info-bar" class="comp-info-bar" style="display:none;">
+      <div class="comp-info-item">
+        <div class="comp-info-label">Overall efficiency</div>
+        <div class="comp-info-value" id="ci-eff">—</div>
+        <div class="comp-info-note" id="ci-eff-note"></div>
+      </div>
+      <div class="comp-info-item">
+        <div class="comp-info-label" id="ci-usage-label">Typical consumption</div>
+        <div class="comp-info-value" id="ci-usage">—</div>
+        <div class="comp-info-note" id="ci-usage-note"></div>
+      </div>
+      <div class="comp-info-item">
+        <div class="comp-info-label">Annual O&amp;M cost</div>
+        <div class="comp-info-value" id="ci-om">—</div>
+        <div class="comp-info-note" id="ci-om-note"></div>
+      </div>
+    </div>
+
+    <div class="field-grid" style="margin-top:12px;">
+      <div class="field">
+        <label>Overall efficiency (%) <span class="research-tag">auto</span></label>
+        <input type="number" id="eff-comp" value="" min="1" max="85" placeholder="Auto-fills on selection">
+        <span class="hint" id="eff-hint">Select pump type above to auto-fill</span>
+      </div>
+      <div class="field">
+        <label>Competitor flow rate (m³/h)</label>
+        <input type="number" id="comp-flow" placeholder="Enter if known">
+        <span class="hint">From spec sheet or nameplate</span>
+      </div>
+      <div id="diesel-price-field" class="field">
+        <label>Diesel price (USD/litre)</label>
+        <input type="number" id="diesel-price" value="1.10" min="0.1" step="0.01">
+        <span class="hint">Indonesia industrial ~$0.42 subsidised; unsubsidised ~$0.88</span>
+      </div>
+      <div id="grid-price-field" class="field" style="display:none;">
+        <label>Grid electricity price (USD/kWh)</label>
+        <input type="number" id="grid-price" value="0.089" min="0.01" step="0.001">
+        <span class="hint">PLN B-2 tariff: Rp 1,444.70/kWh ≈ $0.089 at Rp 16,300/USD</span>
+      </div>
+      <div class="field">
+        <label id="override-label">Consumption override (L/hr)</label>
+        <input type="number" id="override" placeholder="Leave blank — use formula">
+        <span class="hint">Optional: enter actual measured value from field</span>
+      </div>
+    </div>
+
+    <!-- Competitor O&M -->
+    <div class="om-row">
+      <div class="om-label">Competitor annual O&amp;M cost (USD/yr) <span class="research-tag">auto</span></div>
+      <div class="field">
+        <label>Competitor O&amp;M (USD/yr)</label>
+        <input type="number" id="comp-om" placeholder="Auto-fills on selection" min="0">
+        <span class="hint" id="comp-om-hint">Select pump type to auto-fill</span>
+      </div>
+      <div class="field">
+        <label style="color:#999; font-size:12px;">What's included</label>
+        <input type="text" id="comp-om-desc" readonly placeholder="—" style="font-size:12px; color:#888;">
+      </div>
+    </div>
+  </div>
+
+  <!-- AGROS PACKAGE -->
+  <div class="section">
+    <div class="section-title">Agros package</div>
+    <div class="field-grid">
+      <div class="field">
+        <label>Package price (USD)</label>
+        <input type="number" id="pkg-price" value="2500" min="0" step="100">
+      </div>
+      <div class="field">
+        <label>Annual O&amp;M cost (USD/yr)</label>
+        <input type="number" id="om-cost" value="50" min="0" step="10">
+        <span class="hint">Recommended: $50/yr. Covers basic maintenance &amp; cleaning.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- CURRENCY -->
+  <div class="section">
+    <div class="section-title">Currency</div>
+    <div class="field-grid">
+      <div class="field">
+        <label>Display currency</label>
+        <select id="currency" onchange="onCurrencyChange()">
+          <option value="USD">USD – US Dollar</option>
+          <option value="IDR">IDR – Indonesian Rupiah</option>
+          <option value="KHR">KHR – Cambodian Riel</option>
+          <option value="MMK">MMK – Myanmar Kyat</option>
+        </select>
+      </div>
+      <div class="field">
+        <label id="fx-label">Exchange rate (N/A)</label>
+        <input type="number" id="fx-rate" value="1" disabled>
+      </div>
+    </div>
+  </div>
+
+  <button class="calc-btn" onclick="calculate()">Calculate savings</button>
+
+  <!-- RESULTS -->
+  <div id="results" style="display:none;">
+
+    <div class="section">
+      <div class="section-title">Cost comparison <span class="badge" id="cur-badge">USD</span></div>
+      <div class="result-grid">
+        <div class="metric">
+          <div class="metric-label" id="r-comp-label">Competitor annual cost</div>
+          <div class="metric-value" id="r-comp-cost">—</div>
+          <div class="metric-sub" id="r-comp-sub"></div>
+        </div>
+        <div class="metric orange">
+          <div class="metric-label">Competitor O&amp;M/yr</div>
+          <div class="metric-value" id="r-comp-om">—</div>
+          <div class="metric-sub">Maintenance cost/yr</div>
+        </div>
+        <div class="metric orange">
+          <div class="metric-label">Competitor total/yr</div>
+          <div class="metric-value" id="r-comp-total">—</div>
+          <div class="metric-sub">Fuel/energy + O&amp;M</div>
+        </div>
+        <div class="metric">
+          <div class="metric-label">Agros annual O&amp;M</div>
+          <div class="metric-value" id="r-om">—</div>
+          <div class="metric-sub">Ongoing cost/yr</div>
+        </div>
+      </div>
+      <div class="divider"></div>
+      <div class="result-grid">
+        <div class="metric green">
+          <div class="metric-label">Annual savings</div>
+          <div class="metric-value" id="r-savings">—</div>
+          <div class="metric-sub">vs competitor total/year</div>
+        </div>
+        <div class="metric">
+          <div class="metric-label">Payback period</div>
+          <div class="metric-value" id="r-pbp">—</div>
+          <div class="metric-sub" id="r-pbp-sub"></div>
+        </div>
+        <div class="metric green">
+          <div class="metric-label">5-year net savings</div>
+          <div class="metric-value" id="r-5yr">—</div>
+          <div class="metric-sub">After package cost</div>
+        </div>
+        <div class="metric green">
+          <div class="metric-label">10-year net savings</div>
+          <div class="metric-value" id="r-10yr">—</div>
+          <div class="metric-sub">After package cost</div>
+        </div>
+      </div>
+      <div class="divider"></div>
+      <div class="result-grid">
+        <div class="metric">
+          <div class="metric-label" id="r-usage-label">Competitor usage/yr</div>
+          <div class="metric-value" id="r-usage">—</div>
+          <div class="metric-sub" id="r-usage-unit"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- WASTE BREAKDOWN -->
+    <div class="section">
+      <div class="section-title">Energy waste breakdown</div>
+      <div class="section-sub">Of every dollar spent on fuel or electricity, how much actually moves water?</div>
+      <div class="waste-row">
+        <div class="waste-row-header">
+          <span id="waste-comp-name">Competitor pump</span>
+          <span id="waste-comp-total"></span>
+        </div>
+        <div class="waste-bar-bg">
+          <div class="bar-useful" id="bar-useful" style="width:0%"></div>
+          <div class="bar-waste" id="bar-waste" style="width:0%"></div>
+        </div>
+        <div class="waste-labels">
+          <span class="waste-useful-lbl" id="waste-useful-lbl"></span>
+          <span class="waste-waste-lbl" id="waste-waste-lbl"></span>
+        </div>
+      </div>
+      <div class="waste-row" style="margin-top:1rem;">
+        <div class="waste-row-header">
+          <span>Agros solar pump</span>
+          <span id="waste-agros-total"></span>
+        </div>
+        <div class="waste-bar-bg">
+          <div class="bar-zero">$0 fuel cost — O&amp;M only</div>
+        </div>
+      </div>
+      <div class="legend">
+        <div class="legend-item"><div class="legend-dot" style="background:#106A37;"></div>Useful work (moves water)</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#E55A26;"></div>Wasted energy (heat, exhaust, friction)</div>
+      </div>
+      <p class="formula-note" id="r-formula"></p>
+    </div>
+
+    <!-- FLOW COMPARISON -->
+    <div id="flow-section" style="display:none;">
+      <div class="section">
+        <div class="section-title">Water output comparison</div>
+        <div class="section-sub">Agros optimum flow vs competitor rated flow</div>
+        <div class="flow-grid">
+          <div class="metric">
+            <div class="metric-label">Agros daily output</div>
+            <div class="metric-value" id="r-agros-daily">—</div>
+            <div class="metric-sub">m³/day</div>
+          </div>
+          <div class="metric">
+            <div class="metric-label">Competitor daily output</div>
+            <div class="metric-value" id="r-comp-daily">—</div>
+            <div class="metric-sub">m³/day</div>
+          </div>
+          <div class="metric" id="r-diff-card">
+            <div class="metric-label">Daily difference</div>
+            <div class="metric-value" id="r-flow-diff">—</div>
+            <div class="metric-sub">m³/day</div>
+          </div>
+        </div>
+        <div class="divider"></div>
+        <div class="flow-grid">
+          <div class="metric">
+            <div class="metric-label">Agros seasonal output</div>
+            <div class="metric-value" id="r-agros-season">—</div>
+            <div class="metric-sub" id="r-agros-season-sub">m³/season</div>
+          </div>
+          <div class="metric">
+            <div class="metric-label">Competitor seasonal output</div>
+            <div class="metric-value" id="r-comp-season">—</div>
+            <div class="metric-sub">m³/season</div>
+          </div>
+          <div class="metric" id="r-season-diff-card">
+            <div class="metric-label">Seasonal difference</div>
+            <div class="metric-value" id="r-season-diff">—</div>
+            <div class="metric-sub">m³/season</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+const PUMPS = {
+  'PF5.5':    {name:'PowerFlow 5.5',    hp:5.5,  eff:75, flow:62,  variant:'Standard'},
+  'PF5.5HP':  {name:'PowerFlow 5.5-HP', hp:5.5,  eff:73, flow:35,  variant:'High pressure'},
+  'PF7.5':    {name:'PowerFlow 7.5',    hp:7.5,  eff:78, flow:74,  variant:'Standard'},
+  'PF10':     {name:'PowerFlow 10',     hp:10,   eff:80, flow:85,  variant:'Standard'},
+  'PF10HP':   {name:'PowerFlow 10-HP',  hp:10,   eff:77, flow:60,  variant:'High pressure'},
+  'PF15':     {name:'PowerFlow 15',     hp:15,   eff:79, flow:130, variant:'Standard'},
+  'PF15HP':   {name:'PowerFlow 15-HP',  hp:15,   eff:78, flow:74,  variant:'High pressure'},
+  'DF5.5-31': {name:'DeepFlow 5.5-31',  hp:5.5,  eff:70, flow:30,  variant:'Submersible'},
+  'DF5.5-55': {name:'DeepFlow 5.5-55',  hp:5.5,  eff:68, flow:17,  variant:'Submersible'},
+  'DF7.5-23': {name:'DeepFlow 7.5-23',  hp:7.5,  eff:70, flow:60,  variant:'Submersible'},
+  'DF7.5-48': {name:'DeepFlow 7.5-48',  hp:7.5,  eff:70, flow:30,  variant:'Submersible'},
+  'DF10-40':  {name:'DeepFlow 10-40',   hp:10,   eff:70, flow:46,  variant:'Submersible'},
+  'DF10-61':  {name:'DeepFlow 10-61',   hp:10,   eff:70, flow:30,  variant:'Submersible'},
+  'DF15-47':  {name:'DeepFlow 15-47',   hp:15,   eff:70, flow:60,  variant:'Submersible'},
+  'DF15-99':  {name:'DeepFlow 15-99',   hp:15,   eff:70, flow:30,  variant:'Submersible'},
+};
+
+// Research-based competitor profiles
+// eff = overall system efficiency (fuel→hydraulic or wire→hydraulic)
+// om = midpoint annual O&M in USD
+const COMP_TYPES = {
+  // DIESEL
+  yanmar: {
+    label: 'Yanmar / Kubota (branded)',
+    mode: 'diesel',
+    eff: 12,
+    effRange: '10–14%',
+    effNote: 'Engine 32–36% × belt 92–95% × pump 45–55% (Foster et al. 2021, n=116)',
+    usageRange: '0.95–1.4 L/hr at 5.5–15 HP, 70% load',
+    usageNote: 'CSISA Research Note 15, Foster 2021',
+    om: 78,
+    omRange: '$55–100/yr',
+    omNote: 'Oil changes, belt, fuel filter, minor repairs',
+    omDesc: 'Oil (×3/yr), belt, fuel filter, minor repairs'
+  },
+  chinese: {
+    label: 'Chinese clone / no-name',
+    mode: 'diesel',
+    eff: 8,
+    effRange: '6–10%',
+    effNote: 'Engine 25–30% × belt 88–93% × pump 35–45%. Higher unplanned failures vs branded.',
+    usageRange: '1.2–1.6 L/hr at 5.5–15 HP, 70% load',
+    usageNote: 'CSISA Research Note 15 — Chinese >5 HP avg 0.89 L/hr at ~5 HP; scaled for 5.5–15 HP',
+    om: 79,
+    omRange: '$55–103/yr',
+    omNote: 'Lower parts cost, higher unplanned repair frequency',
+    omDesc: 'Oil, belt, higher unplanned repairs vs branded'
+  },
+  generic_diesel: {
+    label: 'Unknown / generic diesel',
+    mode: 'diesel',
+    eff: 10,
+    effRange: '6–14%',
+    effNote: 'Field midpoint from Foster et al. 2021 (46.85 m³/L at 4–6 m TDH = ~10% overall)',
+    usageRange: '1.0–1.5 L/hr typical',
+    usageNote: 'Use override field if actual consumption is known',
+    om: 75,
+    omRange: '$55–100/yr',
+    omNote: 'Midpoint estimate',
+    omDesc: 'Standard diesel pump-set O&M'
+  },
+  // ELECTRIC
+  branded_elec: {
+    label: 'Branded — Grundfos / Ebara / DAB',
+    mode: 'grid',
+    eff: 54,
+    effRange: '49–59%',
+    effNote: 'IE2/IE3 motor 89–91% × hydraulic 55–65% (field duty). Bengawan Solo study: 68% pump-end at BEP.',
+    usageRange: '~6.5–7.0 kWh/hr at 7.5 kW shaft input',
+    usageNote: 'Design point; rises to 7.5–8.5 kWh/hr off-BEP',
+    om: 43,
+    omRange: '$30–55/yr',
+    omNote: 'Bearing/seal service, capacitor, minor repairs',
+    omDesc: 'Bearing/seal service, capacitor replacement'
+  },
+  midmarket_elec: {
+    label: 'Mid-market — CNP / Pedrollo / Panasonic',
+    mode: 'grid',
+    eff: 44,
+    effRange: '39–49%',
+    effNote: 'IE2 motor 87–89% × hydraulic 45–55% (field duty)',
+    usageRange: '~7.0–8.0 kWh/hr at 7.5 kW shaft input',
+    usageNote: 'Design point estimate',
+    om: 49,
+    omRange: '$33–65/yr',
+    omNote: 'Higher capacitor/starter replacement rate vs premium',
+    omDesc: 'Bearing, capacitor/starter, minor repairs'
+  },
+  lowcost_elec: {
+    label: 'Low-cost / Chinese domestic (IE1)',
+    mode: 'grid',
+    eff: 37,
+    effRange: '31–43%',
+    effNote: 'IE1 motor 78–86% × hydraulic 40–50% (field duty). Most common in rural Indonesia.',
+    usageRange: '~8.0–9.5 kWh/hr at 7.5 kW shaft input',
+    usageNote: 'IE1 motor losses significant at this power range',
+    om: 75,
+    omRange: '$50–100/yr',
+    omNote: 'Highest failure rate — motor rewinds, capacitor, impeller wear',
+    omDesc: 'Motor rewinds, capacitor, impeller wear'
+  },
+  generic_elec: {
+    label: 'Unknown / generic electric',
+    mode: 'grid',
+    eff: 42,
+    effRange: '30–55%',
+    effNote: 'Market midpoint for Indonesian rural electric pumps (Foster synthesis)',
+    usageRange: '~7.5–9.0 kWh/hr at 7.5 kW shaft input',
+    usageNote: 'Use override field if actual consumption is known',
+    om: 55,
+    omRange: '$30–100/yr',
+    omNote: 'Midpoint estimate across all electric types',
+    omDesc: 'Standard electric pump O&M'
+  }
+};
+
+const FX = {USD:1, IDR:16300, KHR:4100, MMK:2100};
+const SYM = {USD:'$', IDR:'Rp ', KHR:'฿', MMK:'K '};
+let mode = 'diesel', pump = null, compProfile = null;
+
+function onPumpSelect() {
+  const k = document.getElementById('pump-select').value;
+  if (!k) { document.getElementById('pump-info-bar').style.display='none'; pump=null; return; }
+  pump = PUMPS[k];
+  document.getElementById('info-hp').textContent = pump.hp+' HP';
+  document.getElementById('info-eff').textContent = pump.eff+'%';
+  document.getElementById('info-flow').textContent = pump.flow+' m³/h';
+  document.getElementById('info-variant').textContent = pump.variant;
+  document.getElementById('pump-info-bar').style.display='flex';
+}
+
+function setMode(m) {
+  mode = m;
+  document.getElementById('btn-diesel').classList.toggle('active', m==='diesel');
+  document.getElementById('btn-grid').classList.toggle('active', m==='grid');
+  document.getElementById('diesel-type-wrap').style.display = m==='diesel'?'':'none';
+  document.getElementById('grid-type-wrap').style.display = m==='grid'?'':'none';
+  document.getElementById('diesel-price-field').style.display = m==='diesel'?'':'none';
+  document.getElementById('grid-price-field').style.display = m==='grid'?'':'none';
+  document.getElementById('override-label').textContent = m==='diesel'?'Consumption override (L/hr)':'Power draw override (kW)';
+  // reset comp type selections
+  document.getElementById('diesel-type').value = '';
+  document.getElementById('grid-type').value = '';
+  document.getElementById('comp-info-bar').style.display = 'none';
+  document.getElementById('eff-comp').value = '';
+  document.getElementById('comp-om').value = '';
+  document.getElementById('comp-om-desc').value = '';
+  document.getElementById('eff-hint').textContent = 'Select pump type above to auto-fill';
+  compProfile = null;
+}
+
+function onCompTypeChange() {
+  const key = mode==='diesel'
+    ? document.getElementById('diesel-type').value
+    : document.getElementById('grid-type').value;
+  if (!key) { document.getElementById('comp-info-bar').style.display='none'; compProfile=null; return; }
+  compProfile = COMP_TYPES[key];
+
+  // populate info bar
+  document.getElementById('ci-eff').textContent = compProfile.effRange;
+  document.getElementById('ci-eff-note').textContent = compProfile.effNote;
+  document.getElementById('ci-usage-label').textContent = mode==='diesel'?'Typical fuel use':'Typical power draw';
+  document.getElementById('ci-usage').textContent = compProfile.usageRange;
+  document.getElementById('ci-usage-note').textContent = compProfile.usageNote;
+  document.getElementById('ci-om').textContent = compProfile.omRange;
+  document.getElementById('ci-om-note').textContent = compProfile.omNote;
+  document.getElementById('comp-info-bar').style.display='flex';
+
+  // auto-populate fields
+  document.getElementById('eff-comp').value = compProfile.eff;
+  document.getElementById('eff-hint').textContent = compProfile.effRange+' — editable if you have field data';
+  document.getElementById('comp-om').value = compProfile.om;
+  document.getElementById('comp-om-hint').textContent = compProfile.omRange+' — editable';
+  document.getElementById('comp-om-desc').value = compProfile.omDesc;
+}
+
+function onCurrencyChange() {
+  const cur = document.getElementById('currency').value;
+  document.getElementById('fx-label').textContent = cur==='USD'?'Exchange rate (N/A)':`1 USD = ? ${cur}`;
+  document.getElementById('fx-rate').value = FX[cur];
+  document.getElementById('fx-rate').disabled = cur==='USD';
+}
+
+function fmt(v, cur) {
+  if (isNaN(v)) return '—';
+  return SYM[cur]+Math.round(v).toLocaleString('en-US');
+}
+
+function calculate() {
+  if (!pump) { alert('Please select an Agros pump model first.'); return; }
+  const effComp = parseFloat(document.getElementById('eff-comp').value);
+  if (!effComp || effComp <= 0) { alert('Please select a competitor pump type or enter an efficiency value.'); return; }
+
+  const hours = parseFloat(document.getElementById('hours').value)||0;
+  const days = parseFloat(document.getElementById('days').value)||0;
+  const pkg = parseFloat(document.getElementById('pkg-price').value)||0;
+  const omAgros = parseFloat(document.getElementById('om-cost').value)||50;
+  const omComp = parseFloat(document.getElementById('comp-om').value)||0;
+  const cur = document.getElementById('currency').value;
+  const fx = cur==='USD'?1:(parseFloat(document.getElementById('fx-rate').value)||1);
+  const compFlow = parseFloat(document.getElementById('comp-flow').value);
+  const kw = pump.hp * 0.746;
+  const totalHrs = hours * days;
+  const effFrac = effComp / 100;
+  const ov = parseFloat(document.getElementById('override').value);
+
+  let compFuelCostUSD=0, usage=0, usageUnit='', note='', compLabel='';
+
+  if (mode==='diesel') {
+    const dp = parseFloat(document.getElementById('diesel-price').value)||0;
+    // Use calorific value 9.94 kWh/L (35.8 MJ/L ÷ 3.6) per research
+    const lph = (!isNaN(ov)&&ov>0) ? ov : kw/(9.94*effFrac);
+    usage = lph * totalHrs;
+    usageUnit = 'litres/year';
+    compFuelCostUSD = usage * dp;
+    compLabel = (compProfile ? compProfile.label : 'Diesel pump')+' — fuel cost';
+    note = (!isNaN(ov)&&ov>0)
+      ? `Override: ${ov.toFixed(2)} L/hr × ${totalHrs.toFixed(0)} hrs/yr = ${Math.round(usage).toLocaleString()} L/yr`
+      : `${kw.toFixed(2)} kW ÷ (9.94 kWh/L × ${effComp}% overall eff) = ${lph.toFixed(2)} L/hr → ${Math.round(usage).toLocaleString()} L/yr. Overall eff includes engine thermal + transmission + pump hydraulic losses.`;
+  } else {
+    const gp = parseFloat(document.getElementById('grid-price').value)||0;
+    const kwd = (!isNaN(ov)&&ov>0) ? ov : kw/effFrac;
+    usage = kwd * totalHrs;
+    usageUnit = 'kWh/year';
+    compFuelCostUSD = usage * gp;
+    compLabel = (compProfile ? compProfile.label : 'Grid pump')+' — electricity cost';
+    note = (!isNaN(ov)&&ov>0)
+      ? `Override: ${ov.toFixed(2)} kW draw × ${totalHrs.toFixed(0)} hrs/yr = ${Math.round(usage).toLocaleString()} kWh/yr`
+      : `${kw.toFixed(2)} kW ÷ ${effComp}% wire-to-water eff = ${(kw/effFrac).toFixed(2)} kW draw → ${Math.round(usage).toLocaleString()} kWh/yr. Efficiency accounts for motor IE class + hydraulic losses.`;
+  }
+
+  const compTotalUSD = compFuelCostUSD + omComp;
+  const annualSavings = compTotalUSD - omAgros;
+  const pbp = annualSavings > 0 ? pkg / annualSavings : null;
+
+  // Waste breakdown — applied to fuel/energy cost only (not O&M)
+  const usefulMoney = compFuelCostUSD * effFrac;
+  const wasteMoney = compFuelCostUSD * (1 - effFrac);
+  const usefulPct = Math.round(effFrac * 100);
+  const wastePct = 100 - usefulPct;
+
+  // Populate results
+  document.getElementById('r-comp-label').textContent = compLabel;
+  document.getElementById('r-comp-cost').textContent = fmt(compFuelCostUSD*fx, cur);
+  document.getElementById('r-comp-sub').textContent = mode==='diesel'
+    ? Math.round(usage).toLocaleString()+' L/yr'
+    : Math.round(usage).toLocaleString()+' kWh/yr';
+  document.getElementById('r-comp-om').textContent = fmt(omComp*fx, cur);
+  document.getElementById('r-comp-total').textContent = fmt(compTotalUSD*fx, cur);
+  document.getElementById('r-om').textContent = fmt(omAgros*fx, cur);
+  document.getElementById('r-savings').textContent = annualSavings>0 ? fmt(annualSavings*fx,cur) : '—';
+  document.getElementById('r-pbp').textContent = pbp ? pbp.toFixed(1)+' yrs' : '—';
+  document.getElementById('r-pbp-sub').textContent = pbp ? `Break-even ~${Math.ceil(pbp)} year${Math.ceil(pbp)>1?'s':''}` : 'Check inputs';
+  document.getElementById('r-5yr').textContent = fmt((annualSavings*5-pkg)*fx, cur);
+  document.getElementById('r-10yr').textContent = fmt((annualSavings*10-pkg)*fx, cur);
+  document.getElementById('r-usage-label').textContent = mode==='diesel'?'Diesel consumed/yr':'Grid power consumed/yr';
+  document.getElementById('r-usage').textContent = Math.round(usage).toLocaleString();
+  document.getElementById('r-usage-unit').textContent = usageUnit;
+  document.getElementById('cur-badge').textContent = cur;
+
+  // Waste bar
+  document.getElementById('waste-comp-name').textContent = compProfile ? compProfile.label : (mode==='diesel'?'Diesel pump':'Grid pump');
+  document.getElementById('waste-comp-total').textContent = fmt(compFuelCostUSD*fx,cur)+'/yr fuel/energy spend';
+  document.getElementById('bar-useful').style.width = usefulPct+'%';
+  document.getElementById('bar-waste').style.width = wastePct+'%';
+  document.getElementById('bar-useful').textContent = usefulPct>12 ? usefulPct+'%' : '';
+  document.getElementById('bar-waste').textContent = wastePct>10 ? wastePct+'%' : '';
+  document.getElementById('waste-useful-lbl').textContent = fmt(usefulMoney*fx,cur)+' moves water';
+  document.getElementById('waste-waste-lbl').textContent = fmt(wasteMoney*fx,cur)+' wasted';
+  document.getElementById('waste-agros-total').textContent = fmt(omAgros*fx,cur)+'/yr O&M only';
+  document.getElementById('r-formula').textContent = note;
+
+  // Flow comparison
+  if (!isNaN(compFlow) && compFlow>0) {
+    const aD=pump.flow*hours, cD=compFlow*hours;
+    const aS=pump.flow*totalHrs, cS=compFlow*totalHrs;
+    const dD=aD-cD, dS=aS-cS;
+    document.getElementById('r-agros-daily').textContent = Math.round(aD).toLocaleString();
+    document.getElementById('r-comp-daily').textContent = Math.round(cD).toLocaleString();
+    document.getElementById('r-flow-diff').textContent = (dD>=0?'+':'')+Math.round(dD).toLocaleString();
+    document.getElementById('r-diff-card').className = 'metric '+(dD>=0?'green':'orange');
+    document.getElementById('r-agros-season').textContent = Math.round(aS).toLocaleString();
+    document.getElementById('r-comp-season').textContent = Math.round(cS).toLocaleString();
+    document.getElementById('r-agros-season-sub').textContent = `m³ over ${days} days`;
+    document.getElementById('r-season-diff').textContent = (dS>=0?'+':'')+Math.round(dS).toLocaleString();
+    document.getElementById('r-season-diff-card').className = 'metric '+(dS>=0?'green':'orange');
+    document.getElementById('flow-section').style.display='';
+  } else {
+    document.getElementById('flow-section').style.display='none';
+  }
+
+  document.getElementById('results').style.display='';
+  document.getElementById('results').scrollIntoView({behavior:'smooth', block:'start'});
+}
+</script>
+</body>
+</html>
