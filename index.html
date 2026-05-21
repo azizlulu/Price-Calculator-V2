@@ -198,10 +198,17 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
       <div class="field"><label>Competitor motor rating</label>
         <select id="grid-hp" onchange="onCompTypeChange()">
           <option value="">— Select rating —</option>
-          <option value="2.2">3 HP / 2.2 kW</option><option value="3.0">4 HP / 3.0 kW</option>
-          <option value="4.0">5.5 HP / 4.0 kW</option><option value="5.5">7.5 HP / 5.5 kW</option>
-          <option value="7.5">10 HP / 7.5 kW</option><option value="9.0">12 HP / 9.0 kW</option>
-          <option value="11.0">15 HP / 11.0 kW</option><option value="15.0">20 HP / 15.0 kW</option>
+          <option value="0.75">1 HP / 0.75 kW</option>
+          <option value="1.1">1.5 HP / 1.1 kW</option>
+          <option value="1.5">2 HP / 1.5 kW</option>
+          <option value="2.2">3 HP / 2.2 kW</option>
+          <option value="3.0">4 HP / 3.0 kW</option>
+          <option value="4.0">5.5 HP / 4.0 kW</option>
+          <option value="5.5">7.5 HP / 5.5 kW</option>
+          <option value="7.5">10 HP / 7.5 kW</option>
+          <option value="9.0">12 HP / 9.0 kW</option>
+          <option value="11.0">15 HP / 11.0 kW</option>
+          <option value="15.0">20 HP / 15.0 kW</option>
         </select>
       </div>
       <div class="field"><label>Grid electricity price (USD/kWh)</label><input type="number" id="grid-price" value="0.089" min="0.01" step="0.001"><span class="hint">PLN B-2: Rp 1,444.70/kWh ≈ $0.089</span></div>
@@ -395,21 +402,47 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 <script>
 // ─── DATA ────────────────────────────────────────────────────────────────────
 const PUMPS = {
-  'PF5.5'   :{name:'PowerFlow 5.5',    hp:5.5, eff:75, flow:62,  variant:'Standard'},
-  'PF5.5HP' :{name:'PowerFlow 5.5-HP', hp:5.5, eff:73, flow:35,  variant:'High pressure'},
-  'PF7.5'   :{name:'PowerFlow 7.5',    hp:7.5, eff:78, flow:74,  variant:'Standard'},
-  'PF10'    :{name:'PowerFlow 10',     hp:10,  eff:80, flow:85,  variant:'Standard'},
-  'PF10HP'  :{name:'PowerFlow 10-HP',  hp:10,  eff:77, flow:60,  variant:'High pressure'},
-  'PF15'    :{name:'PowerFlow 15',     hp:15,  eff:79, flow:130, variant:'Standard'},
-  'PF15HP'  :{name:'PowerFlow 15-HP',  hp:15,  eff:78, flow:74,  variant:'High pressure'},
-  'DF5.5-31':{name:'DeepFlow 5.5-31',  hp:5.5, eff:62, flow:30,  variant:'Submersible'},
-  'DF5.5-55':{name:'DeepFlow 5.5-55',  hp:5.5, eff:62, flow:17,  variant:'Submersible'},
-  'DF7.5-23':{name:'DeepFlow 7.5-23',  hp:7.5, eff:62, flow:60,  variant:'Submersible'},
-  'DF7.5-48':{name:'DeepFlow 7.5-48',  hp:7.5, eff:62, flow:30,  variant:'Submersible'},
-  'DF10-40' :{name:'DeepFlow 10-40',   hp:10,  eff:62, flow:46,  variant:'Submersible'},
-  'DF10-61' :{name:'DeepFlow 10-61',   hp:10,  eff:62, flow:30,  variant:'Submersible'},
-  'DF15-47' :{name:'DeepFlow 15-47',   hp:15,  eff:62, flow:60,  variant:'Submersible'},
-  'DF15-99' :{name:'DeepFlow 15-99',   hp:15,  eff:62, flow:30,  variant:'Submersible'},
+  // ── Premium Line ─────────────────────────────────────────────────────────
+  // PowerFlow Premium (surface centrifugal AC)
+  'PF5.5'   :{name:'PowerFlow 5.5',     hp:5.5, eff:75, flow:62,  variant:'Standard',       line:'Premium'},
+  'PF5.5HP' :{name:'PowerFlow 5.5-HP',  hp:5.5, eff:73, flow:35,  variant:'High pressure',  line:'Premium'},
+  'PF7.5'   :{name:'PowerFlow 7.5',     hp:7.5, eff:78, flow:74,  variant:'Standard',       line:'Premium'},
+  'PF10'    :{name:'PowerFlow 10',      hp:10,  eff:80, flow:85,  variant:'Standard',       line:'Premium'},
+  'PF10HP'  :{name:'PowerFlow 10-HP',   hp:10,  eff:77, flow:60,  variant:'High pressure',  line:'Premium'},
+  'PF15'    :{name:'PowerFlow 15',      hp:15,  eff:79, flow:130, variant:'Standard',       line:'Premium'},
+  'PF15HP'  :{name:'PowerFlow 15-HP',   hp:15,  eff:78, flow:74,  variant:'High pressure',  line:'Premium'},
+  // DeepFlow Premium (submersible AC)
+  'DF5.5-31':{name:'DeepFlow 5.5-31',   hp:5.5, eff:62, flow:30,  variant:'Submersible',    line:'Premium'},
+  'DF5.5-55':{name:'DeepFlow 5.5-55',   hp:5.5, eff:62, flow:17,  variant:'Submersible',    line:'Premium'},
+  'DF7.5-23':{name:'DeepFlow 7.5-23',   hp:7.5, eff:62, flow:60,  variant:'Submersible',    line:'Premium'},
+  'DF7.5-48':{name:'DeepFlow 7.5-48',   hp:7.5, eff:62, flow:30,  variant:'Submersible',    line:'Premium'},
+  'DF10-40' :{name:'DeepFlow 10-40',    hp:10,  eff:62, flow:46,  variant:'Submersible',    line:'Premium'},
+  'DF10-61' :{name:'DeepFlow 10-61',    hp:10,  eff:62, flow:30,  variant:'Submersible',    line:'Premium'},
+  'DF15-47' :{name:'DeepFlow 15-47',    hp:15,  eff:62, flow:60,  variant:'Submersible',    line:'Premium'},
+  'DF15-99' :{name:'DeepFlow 15-99',    hp:15,  eff:62, flow:30,  variant:'Submersible',    line:'Premium'},
+  // SlurryFlow Premium
+  'SF5.5-15':{name:'SlurryFlow 5.5-15', hp:5.5, eff:40, flow:60,  variant:'Slurry',         line:'Premium'},
+  // ── Eco Line ─────────────────────────────────────────────────────────────
+  // PowerFlow Eco (surface DC)
+  'EPF1'    :{name:'PowerFlow 1',       hp:1,   eff:55, flow:20,  variant:'Surface DC',     line:'Eco'},
+  'EPF1.5'  :{name:'PowerFlow 1.5',     hp:1.5, eff:55, flow:20,  variant:'Surface DC',     line:'Eco'},
+  'EPF2'    :{name:'PowerFlow 2',       hp:2,   eff:55, flow:32,  variant:'Surface DC',     line:'Eco'},
+  'EPF3'    :{name:'PowerFlow 3',       hp:3,   eff:55, flow:40,  variant:'Surface DC',     line:'Eco'},
+  // DeepFlow Eco (submersible DC)
+  'EDF1-20' :{name:'DeepFlow 1-20',     hp:1,   eff:48, flow:19,  variant:'Submersible DC', line:'Eco'},
+  'EDF1-30' :{name:'DeepFlow 1-30',     hp:1,   eff:48, flow:29,  variant:'Submersible DC', line:'Eco'},
+  'EDF1.5-40':{name:'DeepFlow 1.5-40',  hp:1.5, eff:48, flow:42,  variant:'Submersible DC', line:'Eco'},
+  'EDF1.5-25a':{name:'DeepFlow 1.5-25 (25 m³/h)', hp:1.5, eff:48, flow:25, variant:'Submersible DC', line:'Eco'},
+  'EDF1.5-25b':{name:'DeepFlow 1.5-25 (27 m³/h)', hp:1.5, eff:48, flow:27, variant:'Submersible DC', line:'Eco'},
+  'EDF1.5-35':{name:'DeepFlow 1.5-35',  hp:1.5, eff:48, flow:39,  variant:'Submersible DC', line:'Eco'},
+  'EDF2-25' :{name:'DeepFlow 2-25',     hp:2,   eff:48, flow:19,  variant:'Submersible DC', line:'Eco'},
+  'EDF2-50' :{name:'DeepFlow 2-50',     hp:2,   eff:48, flow:55,  variant:'Submersible DC', line:'Eco'},
+  'EDF2-15' :{name:'DeepFlow 2-15',     hp:2,   eff:48, flow:13,  variant:'Submersible DC', line:'Eco'},
+  'EDF3-25' :{name:'DeepFlow 3-25',     hp:3,   eff:48, flow:32,  variant:'Submersible DC', line:'Eco'},
+  'EDF3-15' :{name:'DeepFlow 3-15',     hp:3,   eff:48, flow:30,  variant:'Submersible DC', line:'Eco'},
+  'EDF3-40' :{name:'DeepFlow 3-40',     hp:3,   eff:48, flow:46,  variant:'Submersible DC', line:'Eco'},
+  // SlurryFlow Eco
+  'ESF1.5-5':{name:'SlurryFlow 1.5-5',  hp:1.5, eff:40, flow:28,  variant:'Slurry DC',      line:'Eco'},
 };
 
 // Diesel lookup: [yanmar, chinese, generic] L/hr midpoints; eff% per type
@@ -446,7 +479,7 @@ function onPumpSelect() {
   document.getElementById('info-hp').textContent      = agPump.hp + ' HP';
   document.getElementById('info-eff').textContent     = agPump.eff + '%';
   document.getElementById('info-flow').textContent    = agPump.flow + ' m³/h';
-  document.getElementById('info-variant').textContent = agPump.variant;
+  document.getElementById('info-variant').textContent = agPump.variant + ' · ' + agPump.line;
   document.getElementById('agros-bar').style.display  = 'flex';
   // Auto-suggest abodemen (PLN B-2: Rp 27,650/kVA/month)
   const kw  = agPump.hp * 0.746;
@@ -667,7 +700,7 @@ function calculate() {
   const agAnnualM3    = agDryTotalM3 + agWetTotalM3;
 
   // ── STEP 6: PLN connection cost (diesel mode only, competitor side) ────────
-  const connActive  = mode==='diesel' && document.getElementById('conn-check').checked;
+  const connActive  = document.getElementById('conn-check').checked;
   const connCostUSD = connActive ? (parseFloat(document.getElementById('conn-cost').value)    || 0) : 0;
   const abodemenUSD = connActive ? (parseFloat(document.getElementById('conn-abodemen').value) || 0) : 0;
 
