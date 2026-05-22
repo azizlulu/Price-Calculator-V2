@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Agros Solar Pump Savings Calculator v6</title>
+<title>Agros Solar Pump Savings Calculator v7</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f5f5f3;color:#1a1a1a;padding:1.5rem;font-size:14px}
@@ -83,7 +83,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
   <div class="dot"></div>
   <div>
     <div class="header-title">Solar pump savings calculator</div>
-    <div class="header-sub">Agrosolar / Agrosolpump — sales tool v6</div>
+    <div class="header-sub">Agrosolar / Agrosolpump — sales tool v7</div>
   </div>
 </div>
 
@@ -94,17 +94,50 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
     <label>Select pump model</label>
     <select id="pump-select" onchange="onPumpSelect()">
       <option value="">— Select a model —</option>
-      <optgroup label="PowerFlow">
-        <option value="PF5.5">PowerFlow 5.5</option><option value="PF5.5HP">PowerFlow 5.5-HP</option>
-        <option value="PF7.5">PowerFlow 7.5</option><option value="PF10">PowerFlow 10</option>
-        <option value="PF10HP">PowerFlow 10-HP</option><option value="PF15">PowerFlow 15</option>
+      <optgroup label="── Premium · PowerFlow">
+        <option value="PF5.5">PowerFlow 5.5</option>
+        <option value="PF5.5HP">PowerFlow 5.5-HP</option>
+        <option value="PF7.5">PowerFlow 7.5</option>
+        <option value="PF10">PowerFlow 10</option>
+        <option value="PF10HP">PowerFlow 10-HP</option>
+        <option value="PF15">PowerFlow 15</option>
         <option value="PF15HP">PowerFlow 15-HP</option>
       </optgroup>
-      <optgroup label="DeepFlow">
-        <option value="DF5.5-31">DeepFlow 5.5-31</option><option value="DF5.5-55">DeepFlow 5.5-55</option>
-        <option value="DF7.5-23">DeepFlow 7.5-23</option><option value="DF7.5-48">DeepFlow 7.5-48</option>
-        <option value="DF10-40">DeepFlow 10-40</option><option value="DF10-61">DeepFlow 10-61</option>
-        <option value="DF15-47">DeepFlow 15-47</option><option value="DF15-99">DeepFlow 15-99</option>
+      <optgroup label="── Premium · DeepFlow">
+        <option value="DF5.5-31">DeepFlow 5.5-31</option>
+        <option value="DF5.5-55">DeepFlow 5.5-55</option>
+        <option value="DF7.5-23">DeepFlow 7.5-23</option>
+        <option value="DF7.5-48">DeepFlow 7.5-48</option>
+        <option value="DF10-40">DeepFlow 10-40</option>
+        <option value="DF10-61">DeepFlow 10-61</option>
+        <option value="DF15-47">DeepFlow 15-47</option>
+        <option value="DF15-99">DeepFlow 15-99</option>
+      </optgroup>
+      <optgroup label="── Premium · SlurryFlow">
+        <option value="SF5.5-15">SlurryFlow 5.5-15</option>
+      </optgroup>
+      <optgroup label="── Eco · PowerFlow">
+        <option value="EPF1">PowerFlow 1</option>
+        <option value="EPF1.5">PowerFlow 1.5</option>
+        <option value="EPF2">PowerFlow 2</option>
+        <option value="EPF3">PowerFlow 3</option>
+      </optgroup>
+      <optgroup label="── Eco · DeepFlow">
+        <option value="EDF1-20">DeepFlow 1-20</option>
+        <option value="EDF1-30">DeepFlow 1-30</option>
+        <option value="EDF1.5-40">DeepFlow 1.5-40</option>
+        <option value="EDF1.5-25a">DeepFlow 1.5-25 (25 m³/h)</option>
+        <option value="EDF1.5-25b">DeepFlow 1.5-25 (27 m³/h)</option>
+        <option value="EDF1.5-35">DeepFlow 1.5-35</option>
+        <option value="EDF2-25">DeepFlow 2-25</option>
+        <option value="EDF2-50">DeepFlow 2-50</option>
+        <option value="EDF2-15">DeepFlow 2-15</option>
+        <option value="EDF3-25">DeepFlow 3-25</option>
+        <option value="EDF3-15">DeepFlow 3-15</option>
+        <option value="EDF3-40">DeepFlow 3-40</option>
+      </optgroup>
+      <optgroup label="── Eco · SlurryFlow">
+        <option value="ESF1.5-5">SlurryFlow 1.5-5</option>
       </optgroup>
     </select>
   </div>
@@ -112,14 +145,14 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
     <div class="ii"><div class="il">Rated power</div><div class="iv-g" id="info-hp">—</div></div>
     <div class="ii"><div class="il">Peak efficiency</div><div class="iv-g" id="info-eff">—</div></div>
     <div class="ii"><div class="il">Optimum flow</div><div class="iv-g" id="info-flow">—</div></div>
-    <div class="ii"><div class="il">Variant</div><div class="iv-g" id="info-variant">—</div></div>
+    <div class="ii"><div class="il">Type · Line</div><div class="iv-g" id="info-variant">—</div></div>
   </div>
 </div>
 
 <!-- SEASONS -->
 <div class="section">
   <div class="section-title">Operating seasons</div>
-  <div class="section-sub">Solar output uses Peak Sun Hours (PSH) — effective hours at full rated flow. Competitor uses actual run hours (constant power).</div>
+  <div class="section-sub">Solar output uses Peak Sun Hours (PSH) — effective hours at full rated flow. Competitor uses actual run hours (constant power source).</div>
   <div class="season-grid">
     <div class="season-box dry">
       <div class="season-label dry">☀️ Dry season</div>
@@ -158,9 +191,18 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
       <div class="field"><label>Competitor motor HP <span class="rtag">research</span></label>
         <select id="diesel-hp" onchange="onCompTypeChange()">
           <option value="">— Select motor HP —</option>
-          <option value="3">3 HP</option><option value="4">4 HP</option><option value="5.5">5.5 HP</option>
-          <option value="7.5">7.5 HP</option><option value="10">10 HP</option><option value="12">12 HP</option>
-          <option value="15">15 HP</option><option value="20">20 HP</option>
+          <option value="1">1 HP</option>
+          <option value="1.5">1.5 HP</option>
+          <option value="2">2 HP</option>
+          <option value="3">3 HP</option>
+          <option value="4">4 HP</option>
+          <option value="5.5">5.5 HP</option>
+          <option value="7.5">7.5 HP</option>
+          <option value="10">10 HP</option>
+          <option value="12">12 HP</option>
+          <option value="15">15 HP</option>
+          <option value="20">20 HP</option>
+          <option value="25">25 HP</option>
         </select>
       </div>
       <div class="field"><label>Diesel price (USD/litre)</label><input type="number" id="diesel-price" value="1.10" min="0.1" step="0.01"><span class="hint">Indonesia unsubsidised ~$0.88</span></div>
@@ -170,7 +212,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
     <div id="diesel-callout" class="callout-yellow" style="display:none;margin-top:10px"></div>
     <div id="diesel-info" class="info-bar-orange" style="display:none">
       <div class="ii"><div class="il">Overall efficiency</div><div class="iv-o" id="d-eff">—</div><div class="in" id="d-eff-n"></div></div>
-      <div class="ii"><div class="il">Fuel consumption</div><div class="iv-o" id="d-lph">—</div><div class="in" id="d-lph-n"></div></div>
+      <div class="ii"><div class="il">Fuel consumption</div><div class="iv-o" id="d-lph">—</div><div class="in">At typical field conditions</div></div>
       <div class="ii"><div class="il">Effective pump HP</div><div class="iv-o" id="d-effhp">—</div><div class="in" id="d-effhp-n"></div></div>
       <div class="ii"><div class="il">Annual O&amp;M</div><div class="iv-o" id="d-om">—</div><div class="in" id="d-om-n"></div></div>
     </div>
@@ -211,7 +253,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
           <option value="15.0">20 HP / 15.0 kW</option>
         </select>
       </div>
-      <div class="field"><label>Grid electricity price (USD/kWh)</label><input type="number" id="grid-price" value="0.089" min="0.01" step="0.001"><span class="hint">PLN B-2: Rp 1,444.70/kWh ≈ $0.089</span></div>
+      <div class="field"><label>Grid electricity price (USD/kWh)</label><input type="number" id="grid-price" value="0.101" min="0.01" step="0.001"><span class="hint">PLN R-2 (3,500 VA): Rp 1,699.53/kWh ≈ $0.101. B-2 (6,600 VA+): $0.089</span></div>
       <div class="field"><label>Competitor flow rate (m³/h)</label><input type="number" id="grid-flow" placeholder="Enter if known"><span class="hint">From spec sheet or nameplate</span></div>
     </div>
     <div id="grid-info" class="info-bar-orange" style="display:none">
@@ -238,15 +280,15 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
     <label class="cbl"><input type="checkbox" id="hybrid-check" onchange="onHybridToggle()">Hybrid operation — solar + grid top-up</label>
   </div>
   <div id="hybrid-content" style="display:none">
-    <div class="section-sub">When solar output doesn't fully cover daily water demand, the VFD switches to grid for the remainder. Top-up cost uses grid price from competitor section above. Requires competitor flow to be entered.</div>
+    <div class="section-sub">When solar output doesn't fully cover daily water demand, the VFD switches to grid for the remainder. Uses grid price from competitor section above. Requires competitor flow to be entered.</div>
     <div class="fg2" style="margin-top:8px">
       <div class="field"><label>Agros nameplate power (auto)</label><input type="text" id="hybrid-kw" readonly placeholder="Select pump model first"><span class="hint">kW drawn from grid during top-up hours</span></div>
     </div>
   </div>
 </div>
 
-<!-- PLN CONNECTION COST (both modes) -->
-<div class="section" id="conn-section">
+<!-- PLN CONNECTION COST -->
+<div class="section">
   <div class="section-title">
     <label class="cbl"><input type="checkbox" id="conn-check" onchange="onConnToggle()">PLN grid connection cost (optional)</label>
   </div>
@@ -298,11 +340,9 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 <!-- RESULTS -->
 <div id="results" style="display:none">
 
-  <!-- COST -->
   <div class="section">
     <div class="section-title">Annual cost comparison <span class="badge" id="cur-badge">USD</span></div>
     <div class="section-sub" id="r-season-note"></div>
-
     <div class="rl">Competitor annual costs</div>
     <div class="rg4">
       <div class="m orange"><div class="ml" id="rl-fuel-dry">Fuel — dry season</div><div class="mv" id="r-fuel-dry">—</div><div class="ms" id="r-fuel-dry-s"></div></div>
@@ -310,10 +350,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
       <div class="m orange"><div class="ml">O&amp;M / year</div><div class="mv" id="r-comp-om">—</div><div class="ms" id="r-comp-om-s">Maintenance</div></div>
       <div class="m orange"><div class="ml">Total competitor / yr</div><div class="mv" id="r-comp-total">—</div><div class="ms" id="r-comp-total-s">Fuel + O&amp;M</div></div>
     </div>
-
-    <!-- Connection cost callout (diesel only) -->
     <div id="r-conn-callout" style="display:none;margin-top:12px"></div>
-
     <div class="rl" style="margin-top:1.2rem">Agros costs</div>
     <div class="rg3">
       <div class="m green"><div class="ml">Annual running cost</div><div class="mv" id="r-agros-running">—</div><div class="ms" id="r-agros-running-s">$0 fuel — solar</div></div>
@@ -329,7 +366,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
     <p class="fn" id="r-formula"></p>
   </div>
 
-  <!-- WASTE -->
   <div class="section">
     <div class="section-title">Energy waste breakdown</div>
     <div class="section-sub" id="r-waste-sub">Of every dollar spent on fuel, how much actually moves water?</div>
@@ -348,11 +384,10 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
     </div>
   </div>
 
-  <!-- WATER OUTPUT -->
   <div id="flow-section" style="display:none">
     <div class="section">
       <div class="section-title">Water output comparison</div>
-      <div class="section-sub">Agros output based on PSH. Competitor output based on actual run hours. When hybrid is active, Agros total includes grid top-up volume.</div>
+      <div class="section-sub">Agros output based on PSH. Competitor based on actual run hours. When hybrid is active, Agros total includes grid top-up volume.</div>
 
       <div class="rl">Dry season</div>
       <div class="rg3">
@@ -360,14 +395,12 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
         <div class="m"><div class="ml">Competitor output</div><div class="mv" id="r-co-dry">—</div><div class="ms" id="r-co-dry-s"></div></div>
         <div class="m" id="r-diff-dry-card"><div class="ml">Difference</div><div class="mv" id="r-diff-dry">—</div><div class="ms">m³ dry season</div></div>
       </div>
-
       <div class="rl" style="margin-top:1rem">Wet season</div>
       <div class="rg3">
         <div class="m"><div class="ml">Agros output</div><div class="mv" id="r-ag-wet">—</div><div class="ms" id="r-ag-wet-s"></div></div>
         <div class="m"><div class="ml">Competitor output</div><div class="mv" id="r-co-wet">—</div><div class="ms" id="r-co-wet-s"></div></div>
         <div class="m" id="r-diff-wet-card"><div class="ml">Difference</div><div class="mv" id="r-diff-wet">—</div><div class="ms">m³ wet season</div></div>
       </div>
-
       <div class="divider"></div>
       <div id="r-hybrid-note" style="display:none;margin-bottom:12px"></div>
       <div class="rl">Annual total</div>
@@ -376,14 +409,12 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
         <div class="m"><div class="ml">Competitor annual output</div><div class="mv" id="r-co-annual">—</div><div class="ms">m³/year</div></div>
         <div class="m" id="r-diff-annual-card"><div class="ml">Annual difference</div><div class="mv" id="r-diff-annual">—</div><div class="ms">m³/year</div></div>
       </div>
-
       <div class="divider"></div>
       <div class="rl">Cost per 1,000 m³</div>
       <div class="rg2">
         <div class="m blue"><div class="ml">Competitor cost / 1,000 m³</div><div class="mv" id="r-co-m3k">—</div><div class="ms">Fuel/energy + O&amp;M</div></div>
         <div class="m green"><div class="ml">Agros cost / 1,000 m³</div><div class="mv" id="r-ag-m3k">—</div><div class="ms">O&amp;M only — $0 fuel</div></div>
       </div>
-
       <div id="land-section" style="display:none">
         <div class="divider"></div>
         <div class="rl">Extra irrigatable land</div>
@@ -396,67 +427,71 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
     </div>
   </div>
 
-</div><!-- end results -->
-</div><!-- end wrap -->
+</div>
+</div>
 
 <script>
-// ─── DATA ────────────────────────────────────────────────────────────────────
+// ─── PUMP DATA ────────────────────────────────────────────────────────────────
 const PUMPS = {
-  // ── Premium Line ─────────────────────────────────────────────────────────
-  // PowerFlow Premium (surface centrifugal AC)
-  'PF5.5'   :{name:'PowerFlow 5.5',     hp:5.5, eff:75, flow:62,  variant:'Standard',       line:'Premium'},
-  'PF5.5HP' :{name:'PowerFlow 5.5-HP',  hp:5.5, eff:73, flow:35,  variant:'High pressure',  line:'Premium'},
-  'PF7.5'   :{name:'PowerFlow 7.5',     hp:7.5, eff:78, flow:74,  variant:'Standard',       line:'Premium'},
-  'PF10'    :{name:'PowerFlow 10',      hp:10,  eff:80, flow:85,  variant:'Standard',       line:'Premium'},
-  'PF10HP'  :{name:'PowerFlow 10-HP',   hp:10,  eff:77, flow:60,  variant:'High pressure',  line:'Premium'},
-  'PF15'    :{name:'PowerFlow 15',      hp:15,  eff:79, flow:130, variant:'Standard',       line:'Premium'},
-  'PF15HP'  :{name:'PowerFlow 15-HP',   hp:15,  eff:78, flow:74,  variant:'High pressure',  line:'Premium'},
-  // DeepFlow Premium (submersible AC)
-  'DF5.5-31':{name:'DeepFlow 5.5-31',   hp:5.5, eff:62, flow:30,  variant:'Submersible',    line:'Premium'},
-  'DF5.5-55':{name:'DeepFlow 5.5-55',   hp:5.5, eff:62, flow:17,  variant:'Submersible',    line:'Premium'},
-  'DF7.5-23':{name:'DeepFlow 7.5-23',   hp:7.5, eff:62, flow:60,  variant:'Submersible',    line:'Premium'},
-  'DF7.5-48':{name:'DeepFlow 7.5-48',   hp:7.5, eff:62, flow:30,  variant:'Submersible',    line:'Premium'},
-  'DF10-40' :{name:'DeepFlow 10-40',    hp:10,  eff:62, flow:46,  variant:'Submersible',    line:'Premium'},
-  'DF10-61' :{name:'DeepFlow 10-61',    hp:10,  eff:62, flow:30,  variant:'Submersible',    line:'Premium'},
-  'DF15-47' :{name:'DeepFlow 15-47',    hp:15,  eff:62, flow:60,  variant:'Submersible',    line:'Premium'},
-  'DF15-99' :{name:'DeepFlow 15-99',    hp:15,  eff:62, flow:30,  variant:'Submersible',    line:'Premium'},
-  // SlurryFlow Premium
-  'SF5.5-15':{name:'SlurryFlow 5.5-15', hp:5.5, eff:40, flow:60,  variant:'Slurry',         line:'Premium'},
-  // ── Eco Line ─────────────────────────────────────────────────────────────
-  // PowerFlow Eco (surface DC)
-  'EPF1'    :{name:'PowerFlow 1',       hp:1,   eff:55, flow:20,  variant:'Surface DC',     line:'Eco'},
-  'EPF1.5'  :{name:'PowerFlow 1.5',     hp:1.5, eff:55, flow:20,  variant:'Surface DC',     line:'Eco'},
-  'EPF2'    :{name:'PowerFlow 2',       hp:2,   eff:55, flow:32,  variant:'Surface DC',     line:'Eco'},
-  'EPF3'    :{name:'PowerFlow 3',       hp:3,   eff:55, flow:40,  variant:'Surface DC',     line:'Eco'},
-  // DeepFlow Eco (submersible DC)
-  'EDF1-20' :{name:'DeepFlow 1-20',     hp:1,   eff:48, flow:19,  variant:'Submersible DC', line:'Eco'},
-  'EDF1-30' :{name:'DeepFlow 1-30',     hp:1,   eff:48, flow:29,  variant:'Submersible DC', line:'Eco'},
-  'EDF1.5-40':{name:'DeepFlow 1.5-40',  hp:1.5, eff:48, flow:42,  variant:'Submersible DC', line:'Eco'},
+  // Premium · PowerFlow (surface centrifugal AC)
+  'PF5.5'     :{name:'PowerFlow 5.5',          hp:5.5, eff:75, flow:62,  variant:'Surface AC',     line:'Premium'},
+  'PF5.5HP'   :{name:'PowerFlow 5.5-HP',       hp:5.5, eff:73, flow:35,  variant:'High pressure',  line:'Premium'},
+  'PF7.5'     :{name:'PowerFlow 7.5',          hp:7.5, eff:78, flow:74,  variant:'Surface AC',     line:'Premium'},
+  'PF10'      :{name:'PowerFlow 10',           hp:10,  eff:80, flow:85,  variant:'Surface AC',     line:'Premium'},
+  'PF10HP'    :{name:'PowerFlow 10-HP',        hp:10,  eff:77, flow:60,  variant:'High pressure',  line:'Premium'},
+  'PF15'      :{name:'PowerFlow 15',           hp:15,  eff:79, flow:130, variant:'Surface AC',     line:'Premium'},
+  'PF15HP'    :{name:'PowerFlow 15-HP',        hp:15,  eff:78, flow:74,  variant:'High pressure',  line:'Premium'},
+  // Premium · DeepFlow (submersible AC)
+  'DF5.5-31'  :{name:'DeepFlow 5.5-31',        hp:5.5, eff:62, flow:30,  variant:'Submersible AC', line:'Premium'},
+  'DF5.5-55'  :{name:'DeepFlow 5.5-55',        hp:5.5, eff:62, flow:17,  variant:'Submersible AC', line:'Premium'},
+  'DF7.5-23'  :{name:'DeepFlow 7.5-23',        hp:7.5, eff:62, flow:60,  variant:'Submersible AC', line:'Premium'},
+  'DF7.5-48'  :{name:'DeepFlow 7.5-48',        hp:7.5, eff:62, flow:30,  variant:'Submersible AC', line:'Premium'},
+  'DF10-40'   :{name:'DeepFlow 10-40',         hp:10,  eff:62, flow:46,  variant:'Submersible AC', line:'Premium'},
+  'DF10-61'   :{name:'DeepFlow 10-61',         hp:10,  eff:62, flow:30,  variant:'Submersible AC', line:'Premium'},
+  'DF15-47'   :{name:'DeepFlow 15-47',         hp:15,  eff:62, flow:60,  variant:'Submersible AC', line:'Premium'},
+  'DF15-99'   :{name:'DeepFlow 15-99',         hp:15,  eff:62, flow:30,  variant:'Submersible AC', line:'Premium'},
+  // Premium · SlurryFlow
+  'SF5.5-15'  :{name:'SlurryFlow 5.5-15',      hp:5.5, eff:40, flow:60,  variant:'Slurry AC',      line:'Premium'},
+  // Eco · PowerFlow (surface DC)
+  'EPF1'      :{name:'PowerFlow 1',            hp:1,   eff:55, flow:20,  variant:'Surface DC',     line:'Eco'},
+  'EPF1.5'    :{name:'PowerFlow 1.5',          hp:1.5, eff:55, flow:20,  variant:'Surface DC',     line:'Eco'},
+  'EPF2'      :{name:'PowerFlow 2',            hp:2,   eff:55, flow:32,  variant:'Surface DC',     line:'Eco'},
+  'EPF3'      :{name:'PowerFlow 3',            hp:3,   eff:55, flow:40,  variant:'Surface DC',     line:'Eco'},
+  // Eco · DeepFlow (submersible DC)
+  'EDF1-20'   :{name:'DeepFlow 1-20',          hp:1,   eff:48, flow:19,  variant:'Submersible DC', line:'Eco'},
+  'EDF1-30'   :{name:'DeepFlow 1-30',          hp:1,   eff:48, flow:29,  variant:'Submersible DC', line:'Eco'},
+  'EDF1.5-40' :{name:'DeepFlow 1.5-40',        hp:1.5, eff:48, flow:42,  variant:'Submersible DC', line:'Eco'},
   'EDF1.5-25a':{name:'DeepFlow 1.5-25 (25 m³/h)', hp:1.5, eff:48, flow:25, variant:'Submersible DC', line:'Eco'},
   'EDF1.5-25b':{name:'DeepFlow 1.5-25 (27 m³/h)', hp:1.5, eff:48, flow:27, variant:'Submersible DC', line:'Eco'},
-  'EDF1.5-35':{name:'DeepFlow 1.5-35',  hp:1.5, eff:48, flow:39,  variant:'Submersible DC', line:'Eco'},
-  'EDF2-25' :{name:'DeepFlow 2-25',     hp:2,   eff:48, flow:19,  variant:'Submersible DC', line:'Eco'},
-  'EDF2-50' :{name:'DeepFlow 2-50',     hp:2,   eff:48, flow:55,  variant:'Submersible DC', line:'Eco'},
-  'EDF2-15' :{name:'DeepFlow 2-15',     hp:2,   eff:48, flow:13,  variant:'Submersible DC', line:'Eco'},
-  'EDF3-25' :{name:'DeepFlow 3-25',     hp:3,   eff:48, flow:32,  variant:'Submersible DC', line:'Eco'},
-  'EDF3-15' :{name:'DeepFlow 3-15',     hp:3,   eff:48, flow:30,  variant:'Submersible DC', line:'Eco'},
-  'EDF3-40' :{name:'DeepFlow 3-40',     hp:3,   eff:48, flow:46,  variant:'Submersible DC', line:'Eco'},
-  // SlurryFlow Eco
-  'ESF1.5-5':{name:'SlurryFlow 1.5-5',  hp:1.5, eff:40, flow:28,  variant:'Slurry DC',      line:'Eco'},
+  'EDF1.5-35' :{name:'DeepFlow 1.5-35',        hp:1.5, eff:48, flow:39,  variant:'Submersible DC', line:'Eco'},
+  'EDF2-25'   :{name:'DeepFlow 2-25',          hp:2,   eff:48, flow:19,  variant:'Submersible DC', line:'Eco'},
+  'EDF2-50'   :{name:'DeepFlow 2-50',          hp:2,   eff:48, flow:55,  variant:'Submersible DC', line:'Eco'},
+  'EDF2-15'   :{name:'DeepFlow 2-15',          hp:2,   eff:48, flow:13,  variant:'Submersible DC', line:'Eco'},
+  'EDF3-25'   :{name:'DeepFlow 3-25',          hp:3,   eff:48, flow:32,  variant:'Submersible DC', line:'Eco'},
+  'EDF3-15'   :{name:'DeepFlow 3-15',          hp:3,   eff:48, flow:30,  variant:'Submersible DC', line:'Eco'},
+  'EDF3-40'   :{name:'DeepFlow 3-40',          hp:3,   eff:48, flow:46,  variant:'Submersible DC', line:'Eco'},
+  // Eco · SlurryFlow
+  'ESF1.5-5'  :{name:'SlurryFlow 1.5-5',       hp:1.5, eff:40, flow:28,  variant:'Slurry DC',      line:'Eco'},
 };
 
-// Diesel lookup: [yanmar, chinese, generic] L/hr midpoints; eff% per type
+// ─── DIESEL LOOKUP ────────────────────────────────────────────────────────────
+// [yanmar, chinese, generic] L/hr midpoints; eff% per type; effective HP after losses
 const DLOOKUP = {
-  3:  {lph:[0.575,0.700,0.625], eff:[12,8,10], effHp:2.0,  stdHp:'~2 HP'},
-  4:  {lph:[0.750,0.900,0.820], eff:[12,8,10], effHp:2.6,  stdHp:'~3 HP'},
-  5.5:{lph:[0.950,1.175,1.050], eff:[12,8,10], effHp:3.5,  stdHp:'~4 HP'},
-  7.5:{lph:[1.250,1.500,1.350], eff:[12,8,10], effHp:4.8,  stdHp:'~5.5 HP'},
-  10: {lph:[1.625,1.950,1.775], eff:[12,8,10], effHp:6.4,  stdHp:'~7.5 HP'},
-  12: {lph:[1.925,2.325,2.125], eff:[12,8,10], effHp:7.7,  stdHp:'~7.5 HP'},
-  15: {lph:[2.350,2.825,2.575], eff:[12,8,10], effHp:9.7,  stdHp:'~10 HP'},
-  20: {lph:[3.050,3.650,3.350], eff:[13,9,11],  effHp:12.8, stdHp:'~12.5 HP'},
+  1:  {lph:[0.190,0.230,0.210], eff:[12,8,10], effHp:0.65, stdHp:'~0.75 HP'},
+  1.5:{lph:[0.280,0.340,0.310], eff:[12,8,10], effHp:1.0,  stdHp:'~1 HP'},
+  2:  {lph:[0.370,0.450,0.410], eff:[12,8,10], effHp:1.3,  stdHp:'~1.5 HP'},
+  3:  {lph:[0.480,0.580,0.530], eff:[12,8,10], effHp:2.0,  stdHp:'~2 HP'},
+  4:  {lph:[0.575,0.700,0.625], eff:[12,8,10], effHp:2.6,  stdHp:'~3 HP'},
+  5.5:{lph:[0.750,0.900,0.820], eff:[12,8,10], effHp:3.5,  stdHp:'~4 HP'},
+  7.5:{lph:[0.950,1.175,1.050], eff:[12,8,10], effHp:4.8,  stdHp:'~5.5 HP'},
+  10: {lph:[1.250,1.500,1.350], eff:[12,8,10], effHp:6.4,  stdHp:'~7.5 HP'},
+  12: {lph:[1.625,1.950,1.775], eff:[12,8,10], effHp:7.7,  stdHp:'~7.5 HP'},
+  15: {lph:[1.925,2.325,2.125], eff:[12,8,10], effHp:9.7,  stdHp:'~10 HP'},
+  20: {lph:[2.350,2.825,2.575], eff:[12,8,10], effHp:12.8, stdHp:'~12.5 HP'},
+  25: {lph:[3.050,3.650,3.350], eff:[13,9,11],  effHp:16.0, stdHp:'~15 HP'},
 };
 
+// ─── COMPETITOR PROFILES ──────────────────────────────────────────────────────
 const CTYPES = {
   yanmar:        {mode:'diesel',effIdx:0,om:78, omRange:'$55–100/yr',omDesc:'Oil (×3/yr), belt, fuel filter, minor repairs',    effRange:'10–14%',effNote:'Foster et al. 2021 n=116; Yanmar/Kubota branded'},
   chinese:       {mode:'diesel',effIdx:1,om:79, omRange:'$55–103/yr',omDesc:'Oil, belt, higher unplanned repair rate',           effRange:'6–10%', effNote:'Foster 2021; CSISA Note 15 — Chinese >5 HP field avg'},
@@ -481,30 +516,25 @@ function onPumpSelect() {
   document.getElementById('info-flow').textContent    = agPump.flow + ' m³/h';
   document.getElementById('info-variant').textContent = agPump.variant + ' · ' + agPump.line;
   document.getElementById('agros-bar').style.display  = 'flex';
-  // Auto-suggest abodemen (PLN B-2: Rp 27,650/kVA/month)
   const kw  = agPump.hp * 0.746;
   const kva = kw / 0.9;
   const abd = Math.round(27650 * kva * 12 / 16300);
-  document.getElementById('conn-abodemen').value = abd;
-  document.getElementById('abodemen-hint').textContent =
-    `PLN B-2 est: Rp 27,650/kVA/month × ${kva.toFixed(1)} kVA ≈ $${abd}/yr — editable`;
-  document.getElementById('hybrid-kw').value = kw.toFixed(2) + ' kW (' + agPump.hp + ' HP)';
+  document.getElementById('conn-abodemen').value      = abd;
+  document.getElementById('abodemen-hint').textContent= `PLN B-2 est: Rp 27,650/kVA/month × ${kva.toFixed(1)} kVA ≈ $${abd}/yr — editable`;
+  document.getElementById('hybrid-kw').value          = kw.toFixed(2) + ' kW (' + agPump.hp + ' HP)';
 }
 
 function setMode(m) {
   mode = m;
   document.getElementById('btn-diesel').classList.toggle('active', m==='diesel');
   document.getElementById('btn-grid').classList.toggle('active',   m==='grid');
-  document.getElementById('diesel-wrap').style.display  = m==='diesel' ? '' : 'none';
-  document.getElementById('grid-wrap').style.display    = m==='grid'   ? '' : 'none';
-  // Hybrid: grid only
-  document.getElementById('hybrid-section').style.display = m==='grid' ? '' : 'none';
+  document.getElementById('diesel-wrap').style.display   = m==='diesel' ? '' : 'none';
+  document.getElementById('grid-wrap').style.display     = m==='grid'   ? '' : 'none';
+  document.getElementById('hybrid-section').style.display= m==='grid'   ? '' : 'none';
   if (m==='diesel') {
     document.getElementById('hybrid-check').checked = false;
     document.getElementById('hybrid-content').style.display = 'none';
   }
-  // Connection cost: both modes
-  document.getElementById('conn-section').style.display = '';
 }
 
 function onHybridToggle() {
@@ -523,42 +553,40 @@ function onCompTypeChange() {
     : document.getElementById('grid-type').value;
   if (!typeKey) return;
   const prof = CTYPES[typeKey];
-
   if (mode === 'diesel') {
     const hpVal = parseFloat(document.getElementById('diesel-hp').value);
     if (!hpVal) return;
-    const lk  = DLOOKUP[hpVal];
+    const lk = DLOOKUP[hpVal];
     if (!lk) return;
     const idx = prof.effIdx;
-    document.getElementById('d-eff').textContent    = lk.eff[idx] + '% overall (' + prof.effRange + ')';
-    document.getElementById('d-eff-n').textContent  = prof.effNote;
-    document.getElementById('d-lph').textContent    = lk.lph[idx].toFixed(2) + ' L/hr';
-    document.getElementById('d-lph-n').textContent  = 'At typical field conditions';
-    document.getElementById('d-effhp').textContent  = lk.effHp + ' HP effective';
-    document.getElementById('d-effhp-n').textContent= 'Equivalent to ' + lk.stdHp + ' electric pump output';
-    document.getElementById('d-om').textContent     = prof.omRange;
-    document.getElementById('d-om-n').textContent   = prof.omDesc;
-    document.getElementById('diesel-comp-om').value = prof.om;
-    document.getElementById('d-om-hint').textContent= prof.omRange + ' — editable';
-    document.getElementById('diesel-om-desc').value = prof.omDesc;
-    document.getElementById('diesel-info').style.display   = 'flex';
-    document.getElementById('diesel-callout').style.display= 'block';
-    document.getElementById('diesel-callout').textContent  =
+    document.getElementById('d-eff').textContent     = lk.eff[idx] + '% overall (' + prof.effRange + ')';
+    document.getElementById('d-eff-n').textContent   = prof.effNote;
+    document.getElementById('d-lph').textContent     = lk.lph[idx].toFixed(2) + ' L/hr';
+    document.getElementById('d-effhp').textContent   = lk.effHp + ' HP effective';
+    document.getElementById('d-effhp-n').textContent = 'Equivalent to ' + lk.stdHp + ' electric pump output';
+    document.getElementById('d-om').textContent      = prof.omRange;
+    document.getElementById('d-om-n').textContent    = prof.omDesc;
+    document.getElementById('diesel-comp-om').value  = prof.om;
+    document.getElementById('d-om-hint').textContent = prof.omRange + ' — editable';
+    document.getElementById('diesel-om-desc').value  = prof.omDesc;
+    document.getElementById('diesel-info').style.display    = 'flex';
+    document.getElementById('diesel-callout').style.display = 'block';
+    document.getElementById('diesel-callout').textContent   =
       `⚡ A ${hpVal} HP diesel motor delivers the effective output of ${lk.stdHp} electric pump (${lk.effHp} HP actual) after engine thermal, transmission, and pump losses.`;
   } else {
-    const kw = parseFloat(document.getElementById('grid-hp').value) || 0;
+    const kw     = parseFloat(document.getElementById('grid-hp').value) || 0;
     const useful = (kw * prof.eff / 100).toFixed(2);
     const wasted = (kw * (1 - prof.eff/100)).toFixed(2);
-    document.getElementById('g-eff').textContent   = prof.effRange;
-    document.getElementById('g-eff-n').textContent = prof.effNote;
-    document.getElementById('g-kw').textContent    = kw ? kw.toFixed(1) + ' kW' : '— (select rating)';
-    document.getElementById('g-useful').textContent= kw ? useful + ' kW' : '—';
-    document.getElementById('g-wasted').textContent= kw ? wasted + ' kW' : '—';
-    document.getElementById('g-om').textContent    = prof.omRange;
-    document.getElementById('g-om-n').textContent  = prof.omDesc;
-    document.getElementById('grid-comp-om').value  = prof.om;
-    document.getElementById('g-om-hint').textContent = prof.omRange + ' — editable';
-    document.getElementById('grid-om-desc').value  = prof.omDesc;
+    document.getElementById('g-eff').textContent    = prof.effRange;
+    document.getElementById('g-eff-n').textContent  = prof.effNote;
+    document.getElementById('g-kw').textContent     = kw ? kw.toFixed(1) + ' kW' : '— (select rating)';
+    document.getElementById('g-useful').textContent = kw ? useful + ' kW' : '—';
+    document.getElementById('g-wasted').textContent = kw ? wasted + ' kW' : '—';
+    document.getElementById('g-om').textContent     = prof.omRange;
+    document.getElementById('g-om-n').textContent   = prof.omDesc;
+    document.getElementById('grid-comp-om').value   = prof.om;
+    document.getElementById('g-om-hint').textContent= prof.omRange + ' — editable';
+    document.getElementById('grid-om-desc').value   = prof.omDesc;
     document.getElementById('grid-info').style.display = 'flex';
     if (kw) {
       document.getElementById('grid-callout').style.display = 'block';
@@ -577,16 +605,16 @@ function onCurrencyChange() {
 
 // ─── HELPERS ─────────────────────────────────────────────────────────────────
 function fmt(v, cur) {
-  if (isNaN(v) || v === null) return '—';
+  if (isNaN(v)||v===null) return '—';
   return SYM[cur] + Math.round(v).toLocaleString('en-US');
 }
 function fmtDec(v, d, cur) {
-  if (isNaN(v) || v === null) return '—';
-  return SYM[cur] + (v * 1).toFixed(d);
+  if (isNaN(v)||v===null) return '—';
+  return SYM[cur] + (v*1).toFixed(d);
 }
 function setCard(cardId, valId, val, unit) {
-  document.getElementById(valId).textContent = (val >= 0 ? '+' : '') + Math.round(val).toLocaleString();
-  document.getElementById(cardId).className  = 'm ' + (val >= 0 ? 'green' : 'orange');
+  document.getElementById(valId).textContent = (val>=0?'+':'') + Math.round(val).toLocaleString();
+  document.getElementById(cardId).className  = 'm ' + (val>=0?'green':'orange');
   const sub = document.getElementById(cardId).querySelector('.ms');
   if (sub && unit) sub.textContent = unit;
 }
@@ -596,12 +624,12 @@ function calculate() {
   if (!agPump) { alert('Please select an Agros pump model.'); return; }
 
   // Season inputs
-  const dryDays    = parseFloat(document.getElementById('dry-days').value)    || 0;
-  const wetDays    = parseFloat(document.getElementById('wet-days').value)    || 0;
-  const dryCompHrs = parseFloat(document.getElementById('dry-comp-hrs').value)|| 0;
-  const wetCompHrs = parseFloat(document.getElementById('wet-comp-hrs').value)|| 0;
-  const dryPsh     = parseFloat(document.getElementById('dry-psh').value)     || 0;
-  const wetPsh     = parseFloat(document.getElementById('wet-psh').value)     || 0;
+  const dryDays    = parseFloat(document.getElementById('dry-days').value)     || 0;
+  const wetDays    = parseFloat(document.getElementById('wet-days').value)     || 0;
+  const dryCompHrs = parseFloat(document.getElementById('dry-comp-hrs').value) || 0;
+  const wetCompHrs = parseFloat(document.getElementById('wet-comp-hrs').value) || 0;
+  const dryPsh     = parseFloat(document.getElementById('dry-psh').value)      || 0;
+  const wetPsh     = parseFloat(document.getElementById('wet-psh').value)      || 0;
 
   // Package / display
   const pkg     = parseFloat(document.getElementById('pkg-price').value) || 0;
@@ -619,13 +647,13 @@ function calculate() {
   if (mode === 'diesel') {
     const hpVal   = parseFloat(document.getElementById('diesel-hp').value);
     const typeKey = document.getElementById('diesel-type').value;
-    if (!hpVal || !typeKey) { alert('Please select competitor pump type and motor HP.'); return; }
-    const lk  = DLOOKUP[hpVal];
-    const prof = CTYPES[typeKey];
-    const idx  = prof.effIdx;
-    const ov   = parseFloat(document.getElementById('diesel-override').value);
-    const lph  = (!isNaN(ov) && ov > 0) ? ov : lk.lph[idx];
-    const dp   = parseFloat(document.getElementById('diesel-price').value) || 0;
+    if (!hpVal||!typeKey) { alert('Please select competitor pump type and motor HP.'); return; }
+    const lk   = DLOOKUP[hpVal];
+    const prof  = CTYPES[typeKey];
+    const idx   = prof.effIdx;
+    const ov    = parseFloat(document.getElementById('diesel-override').value);
+    const lph   = (!isNaN(ov)&&ov>0) ? ov : lk.lph[idx];
+    const dp    = parseFloat(document.getElementById('diesel-price').value) || 0;
     usageDry    = lph * dryCompHrs * dryDays;
     usageWet    = lph * wetCompHrs * wetDays;
     usageUnit   = 'litres/year';
@@ -634,15 +662,13 @@ function calculate() {
     compEff     = lk.eff[idx] / 100;
     compOmUSD   = parseFloat(document.getElementById('diesel-comp-om').value) || 0;
     compFlowVal = parseFloat(document.getElementById('diesel-flow').value);
-    noteStr = `Lookup: ${hpVal}HP ${typeKey} → ${lph.toFixed(2)} L/hr. `+
-              `Dry: ${Math.round(usageDry).toLocaleString()} L. Wet: ${Math.round(usageWet).toLocaleString()} L. `+
-              `Source: Foster et al. 2021, CSISA Note 15.`;
+    noteStr = `Lookup: ${hpVal}HP ${typeKey} → ${lph.toFixed(2)} L/hr. Dry: ${Math.round(usageDry).toLocaleString()} L. Wet: ${Math.round(usageWet).toLocaleString()} L. Source: Foster et al. 2021, CSISA Note 15.`;
   } else {
     const kw      = parseFloat(document.getElementById('grid-hp').value);
     const typeKey = document.getElementById('grid-type').value;
-    if (!kw || !typeKey) { alert('Please select competitor pump type and motor rating.'); return; }
-    const prof = CTYPES[typeKey];
-    const gp   = parseFloat(document.getElementById('grid-price').value) || 0;
+    if (!kw||!typeKey) { alert('Please select competitor pump type and motor rating.'); return; }
+    const prof  = CTYPES[typeKey];
+    const gp    = parseFloat(document.getElementById('grid-price').value) || 0;
     compKw      = kw;
     compEff     = prof.eff / 100;
     usageDry    = kw * dryCompHrs * dryDays;
@@ -652,8 +678,7 @@ function calculate() {
     compFuelWet = usageWet * gp;
     compOmUSD   = parseFloat(document.getElementById('grid-comp-om').value) || 0;
     compFlowVal = parseFloat(document.getElementById('grid-flow').value);
-    noteStr = `${kw} kW nameplate draws full power at all times. `+
-              `Dry: ${Math.round(usageDry).toLocaleString()} kWh. Wet: ${Math.round(usageWet).toLocaleString()} kWh.`;
+    noteStr = `${kw} kW nameplate draws full power at all times. Dry: ${Math.round(usageDry).toLocaleString()} kWh. Wet: ${Math.round(usageWet).toLocaleString()} kWh.`;
   }
 
   const compFuelTotal = compFuelDry + compFuelWet;
@@ -669,29 +694,23 @@ function calculate() {
   const agWetSolarM3 = agPump.flow * wetPsh * wetDays;
 
   // ── STEP 4: Hybrid top-up (grid mode only) ────────────────────────────────
-  // Top-up volume = water shortfall (what solar didn't cover of competitor's target)
-  // Top-up cost   = (top-up volume ÷ agFlow) × agKw × gridPrice
   let hybridTopUpCostUSD = 0;
-  let agDryTopUpM3 = 0, agWetTopUpM3 = 0;
-  let hybridDryCovPct = null, hybridWetCovPct = null;
-  let dryTopUpHrsPD = 0, wetTopUpHrsPD = 0; // hrs/day for display
-  const hybridActive = mode === 'grid' && document.getElementById('hybrid-check').checked;
+  let agDryTopUpM3=0, agWetTopUpM3=0;
+  let hybridDryCovPct=null, hybridWetCovPct=null;
+  let dryTopUpHrsPD=0, wetTopUpHrsPD=0;
+  const hybridActive = mode==='grid' && document.getElementById('hybrid-check').checked;
 
   if (hybridActive && hasCompFlow) {
     const gp = parseFloat(document.getElementById('grid-price').value) || 0;
-    // Volume shortfall per season
     agDryTopUpM3 = Math.max(0, compDryM3 - agDrySolarM3);
     agWetTopUpM3 = Math.max(0, compWetM3 - agWetSolarM3);
-    // Top-up hours total per season → cost
     const dryTopUpHrsTotal = agPump.flow > 0 ? agDryTopUpM3 / agPump.flow : 0;
     const wetTopUpHrsTotal = agPump.flow > 0 ? agWetTopUpM3 / agPump.flow : 0;
     hybridTopUpCostUSD = (dryTopUpHrsTotal + wetTopUpHrsTotal) * agKw * gp;
-    // Top-up hrs/day for display
     dryTopUpHrsPD = dryDays > 0 ? dryTopUpHrsTotal / dryDays : 0;
     wetTopUpHrsPD = wetDays > 0 ? wetTopUpHrsTotal / wetDays : 0;
-    // Solar coverage %
-    hybridDryCovPct = compDryM3 > 0 ? Math.min(100, Math.round(agDrySolarM3 / compDryM3 * 100)) : 100;
-    hybridWetCovPct = compWetM3 > 0 ? Math.min(100, Math.round(agWetSolarM3 / compWetM3 * 100)) : 100;
+    hybridDryCovPct = compDryM3 > 0 ? Math.min(100, Math.round(agDrySolarM3/compDryM3*100)) : 100;
+    hybridWetCovPct = compWetM3 > 0 ? Math.min(100, Math.round(agWetSolarM3/compWetM3*100)) : 100;
   }
 
   // ── STEP 5: Agros total water volumes (solar + top-up) ────────────────────
@@ -699,130 +718,109 @@ function calculate() {
   const agWetTotalM3  = agWetSolarM3 + agWetTopUpM3;
   const agAnnualM3    = agDryTotalM3 + agWetTotalM3;
 
-  // ── STEP 6: PLN connection cost (diesel mode only, competitor side) ────────
+  // ── STEP 6: PLN connection cost ───────────────────────────────────────────
   const connActive  = document.getElementById('conn-check').checked;
-  const connCostUSD = connActive ? (parseFloat(document.getElementById('conn-cost').value)    || 0) : 0;
-  const abodemenUSD = connActive ? (parseFloat(document.getElementById('conn-abodemen').value) || 0) : 0;
+  const connCostUSD = connActive ? (parseFloat(document.getElementById('conn-cost').value)     || 0) : 0;
+  const abodemenUSD = connActive ? (parseFloat(document.getElementById('conn-abodemen').value)  || 0) : 0;
 
   // ── STEP 7: Final cost totals ──────────────────────────────────────────────
-  // Competitor annual = fuel + O&M + abodemen (abodemen only if conn active)
   const compAnnualTotal  = compFuelTotal + compOmUSD + abodemenUSD;
-  // Agros annual = O&M + hybrid top-up cost
   const agrosAnnualTotal = omAgros + hybridTopUpCostUSD;
-  // Annual savings
-  const annualSavings = compAnnualTotal - agrosAnnualTotal;
-  // PBP: net capital = Agros pkg − competitor connection fee
-  // (if customer connects to grid instead they spend connCostUSD upfront)
-  const netCapital = Math.max(0, pkg - connCostUSD);
-  const pbp        = annualSavings > 0 ? netCapital / annualSavings : null;
-  // 5yr/10yr always uses full Agros pkg as capital cost
-  const net5  = annualSavings * 5  - pkg;
-  const net10 = annualSavings * 10 - pkg;
+  const annualSavings    = compAnnualTotal - agrosAnnualTotal;
+  const netCapital       = Math.max(0, pkg - connCostUSD);
+  const pbp              = annualSavings > 0 ? netCapital / annualSavings : null;
+  const net5             = annualSavings * 5  - pkg;
+  const net10            = annualSavings * 10 - pkg;
 
-  // ── STEP 8: Cost per 1,000 m³ ──────────────────────────────────────────────
-  // Use total Agros output (solar + top-up) as denominator
-  const compM3k = compAnnualM3 && compAnnualM3 > 0 ? compAnnualTotal / compAnnualM3 * 1000 : null;
-  const agM3k   = agAnnualM3   > 0                 ? agrosAnnualTotal / agAnnualM3  * 1000 : null;
+  // ── STEP 8: Cost per 1,000 m³ ─────────────────────────────────────────────
+  const compM3k = compAnnualM3 && compAnnualM3 > 0 ? compAnnualTotal  / compAnnualM3  * 1000 : null;
+  const agM3k   = agAnnualM3   > 0                 ? agrosAnnualTotal / agAnnualM3    * 1000 : null;
 
   // ── POPULATE: Cost section ────────────────────────────────────────────────
   document.getElementById('r-season-note').textContent =
     `Dry: ${dryDays} days, competitor ${dryCompHrs} hrs/day, Agros ${dryPsh} PSH/day. `+
     `Wet: ${wetDays} days, competitor ${wetCompHrs} hrs/day, Agros ${wetPsh} PSH/day.`;
-
   const fuelLabel = mode==='diesel' ? 'Diesel fuel' : 'Grid electricity';
   document.getElementById('rl-fuel-dry').textContent = fuelLabel + ' — dry season';
   document.getElementById('rl-fuel-wet').textContent = fuelLabel + ' — wet season';
   document.getElementById('r-fuel-dry').textContent  = fmt(compFuelDry * fx, cur);
-  document.getElementById('r-fuel-dry-s').textContent= mode==='diesel'
-    ? Math.round(usageDry).toLocaleString()+' L' : Math.round(usageDry).toLocaleString()+' kWh';
+  document.getElementById('r-fuel-dry-s').textContent= mode==='diesel' ? Math.round(usageDry).toLocaleString()+' L' : Math.round(usageDry).toLocaleString()+' kWh';
   document.getElementById('r-fuel-wet').textContent  = fmt(compFuelWet * fx, cur);
-  document.getElementById('r-fuel-wet-s').textContent= mode==='diesel'
-    ? Math.round(usageWet).toLocaleString()+' L' : Math.round(usageWet).toLocaleString()+' kWh';
+  document.getElementById('r-fuel-wet-s').textContent= mode==='diesel' ? Math.round(usageWet).toLocaleString()+' L' : Math.round(usageWet).toLocaleString()+' kWh';
+  document.getElementById('r-comp-om').textContent   = fmt((compOmUSD+abodemenUSD)*fx, cur);
+  document.getElementById('r-comp-om-s').textContent = connActive&&abodemenUSD>0 ? `O&M + abodemen ${fmt(abodemenUSD*fx,cur)}/yr` : 'Maintenance';
+  document.getElementById('r-comp-total').textContent  = fmt(compAnnualTotal*fx, cur);
+  document.getElementById('r-comp-total-s').textContent= connActive&&abodemenUSD>0 ? 'Fuel + O&M + abodemen' : 'Fuel + O&M';
 
-  document.getElementById('r-comp-om').textContent   = fmt((compOmUSD + abodemenUSD) * fx, cur);
-  document.getElementById('r-comp-om-s').textContent = connActive && abodemenUSD > 0
-    ? `O&M + abodemen ${fmt(abodemenUSD*fx, cur)}/yr` : 'Maintenance';
-
-  document.getElementById('r-comp-total').textContent   = fmt(compAnnualTotal * fx, cur);
-  document.getElementById('r-comp-total-s').textContent = connActive && abodemenUSD > 0
-    ? 'Fuel + O&M + abodemen' : 'Fuel + O&M';
-
-  // Connection cost callout (one-time, diesel only)
   const connCallout = document.getElementById('r-conn-callout');
   if (connActive && connCostUSD > 0) {
     connCallout.style.display = '';
     connCallout.className     = 'callout-blue';
     const cheaper = connCostUSD < pkg;
     connCallout.textContent =
-      `Upfront cost comparison — Grid connection: ${fmt(connCostUSD*fx, cur)} one-time fee vs `+
-      `Agros solar package: ${fmt(pkg*fx, cur)}. `+
+      `Upfront comparison — Grid connection: ${fmt(connCostUSD*fx,cur)} one-time vs Agros package: ${fmt(pkg*fx,cur)}. `+
       (cheaper
-        ? `Solar is ${fmt((pkg-connCostUSD)*fx, cur)} more upfront — recovered in ~${pbp ? pbp.toFixed(1)+' yrs' : '—'} through annual savings.`
-        : `Solar is ${fmt((connCostUSD-pkg)*fx, cur)} cheaper upfront — plus ongoing annual savings.`);
+        ? `Solar is ${fmt((pkg-connCostUSD)*fx,cur)} more upfront — recovered in ~${pbp?pbp.toFixed(1)+' yrs':'—'} through annual savings.`
+        : `Solar is ${fmt((connCostUSD-pkg)*fx,cur)} cheaper upfront — plus ongoing annual savings.`);
   } else {
     connCallout.style.display = 'none';
   }
 
-  document.getElementById('r-agros-running').textContent   = fmt(agrosAnnualTotal * fx, cur);
-  document.getElementById('r-agros-running-s').textContent = hybridActive && hybridTopUpCostUSD > 0
+  document.getElementById('r-agros-running').textContent   = fmt(agrosAnnualTotal*fx, cur);
+  document.getElementById('r-agros-running-s').textContent = hybridActive&&hybridTopUpCostUSD>0
     ? `O&M ${fmt(omAgros*fx,cur)} + top-up ${fmt(hybridTopUpCostUSD*fx,cur)}` : '$0 fuel — solar';
-
-  document.getElementById('r-savings').textContent = annualSavings > 0 ? fmt(annualSavings * fx, cur) : '—';
-  document.getElementById('r-pbp').textContent     = pbp ? pbp.toFixed(1) + ' yrs' : '—';
+  document.getElementById('r-savings').textContent = annualSavings>0 ? fmt(annualSavings*fx,cur) : '—';
+  document.getElementById('r-pbp').textContent     = pbp ? pbp.toFixed(1)+' yrs' : '—';
   document.getElementById('r-pbp-s').textContent   = pbp
-    ? (connActive && connCostUSD > 0
+    ? (connActive&&connCostUSD>0
         ? `Net capital ${fmt(netCapital*fx,cur)} after ${fmt(connCostUSD*fx,cur)} grid offset`
         : `Break-even ~${Math.ceil(pbp)} year${Math.ceil(pbp)>1?'s':''}`)
     : 'Check inputs';
-
-  document.getElementById('r-5yr').textContent  = fmt(net5  * fx, cur);
-  document.getElementById('r-10yr').textContent = fmt(net10 * fx, cur);
-  document.getElementById('rl-usage').textContent   = mode==='diesel' ? 'Total diesel / yr' : 'Total grid power / yr';
-  document.getElementById('r-usage').textContent    = Math.round(usageDry + usageWet).toLocaleString();
-  document.getElementById('r-usage-s').textContent  = usageUnit;
-  document.getElementById('cur-badge').textContent  = cur;
-  document.getElementById('r-formula').textContent  = noteStr;
+  document.getElementById('r-5yr').textContent          = fmt(net5  * fx, cur);
+  document.getElementById('r-10yr').textContent         = fmt(net10 * fx, cur);
+  document.getElementById('rl-usage').textContent       = mode==='diesel' ? 'Total diesel / yr' : 'Total grid power / yr';
+  document.getElementById('r-usage').textContent        = Math.round(usageDry+usageWet).toLocaleString();
+  document.getElementById('r-usage-s').textContent      = usageUnit;
+  document.getElementById('cur-badge').textContent      = cur;
+  document.getElementById('r-formula').textContent      = noteStr;
 
   // ── POPULATE: Waste bar ───────────────────────────────────────────────────
-  const usefulPct = Math.round(compEff * 100);
+  const usefulPct = Math.round(compEff*100);
   const wastePct  = 100 - usefulPct;
-  if (mode === 'diesel') {
+  if (mode==='diesel') {
     document.getElementById('r-waste-sub').textContent  = 'Of every dollar spent on diesel fuel, how much actually moves water?';
     document.getElementById('r-legend-u').textContent   = 'Useful work (moves water)';
     document.getElementById('r-legend-w').textContent   = 'Wasted energy (heat, exhaust, friction)';
-    document.getElementById('r-wu').textContent         = fmt(compFuelTotal * compEff * fx, cur) + ' moves water';
-    document.getElementById('r-ww').textContent         = fmt(compFuelTotal * (1-compEff) * fx, cur) + ' wasted';
-    document.getElementById('r-waste-total').textContent= fmt(compFuelTotal * fx, cur) + '/yr fuel spend';
+    document.getElementById('r-wu').textContent         = fmt(compFuelTotal*compEff*fx,cur)+' moves water';
+    document.getElementById('r-ww').textContent         = fmt(compFuelTotal*(1-compEff)*fx,cur)+' wasted';
+    document.getElementById('r-waste-total').textContent= fmt(compFuelTotal*fx,cur)+'/yr fuel spend';
   } else {
     document.getElementById('r-waste-sub').textContent  = 'Of every kW drawn from the grid, how much actually moves water?';
     document.getElementById('r-legend-u').textContent   = 'Useful hydraulic power (moves water)';
     document.getElementById('r-legend-w').textContent   = 'Wasted power (motor heat + friction)';
-    document.getElementById('r-wu').textContent         = (compKw * compEff).toFixed(2) + ' kW moves water';
-    document.getElementById('r-ww').textContent         = (compKw * (1-compEff)).toFixed(2) + ' kW wasted';
-    document.getElementById('r-waste-total').textContent= compKw.toFixed(1) + ' kW nameplate draw';
+    document.getElementById('r-wu').textContent         = (compKw*compEff).toFixed(2)+' kW moves water';
+    document.getElementById('r-ww').textContent         = (compKw*(1-compEff)).toFixed(2)+' kW wasted';
+    document.getElementById('r-waste-total').textContent= compKw.toFixed(1)+' kW nameplate draw';
   }
-  document.getElementById('r-waste-name').textContent        = mode==='diesel' ? 'Diesel pump' : 'Grid pump';
-  document.getElementById('bar-u').style.width               = usefulPct + '%';
-  document.getElementById('bar-w').style.width               = wastePct  + '%';
-  document.getElementById('bar-u').textContent               = usefulPct > 12 ? usefulPct + '%' : '';
-  document.getElementById('bar-w').textContent               = wastePct  > 10 ? wastePct  + '%' : '';
-  document.getElementById('r-agros-waste-total').textContent = fmt(agrosAnnualTotal * fx, cur) + '/yr running cost';
+  document.getElementById('r-waste-name').textContent        = mode==='diesel'?'Diesel pump':'Grid pump';
+  document.getElementById('bar-u').style.width               = usefulPct+'%';
+  document.getElementById('bar-w').style.width               = wastePct+'%';
+  document.getElementById('bar-u').textContent               = usefulPct>12?usefulPct+'%':'';
+  document.getElementById('bar-w').textContent               = wastePct>10?wastePct+'%':'';
+  document.getElementById('r-agros-waste-total').textContent = fmt(agrosAnnualTotal*fx,cur)+'/yr running cost';
 
   // ── POPULATE: Water output ────────────────────────────────────────────────
-  // Always show Agros output (even without competitor flow)
-  const hasTopUp = hybridActive && (agDryTopUpM3 > 0 || agWetTopUpM3 > 0);
-  const fullSolar = hybridActive && agDryTopUpM3 === 0 && agWetTopUpM3 === 0;
+  const hasTopUp  = hybridActive && (agDryTopUpM3>0||agWetTopUpM3>0);
+  const fullSolar = hybridActive && agDryTopUpM3===0 && agWetTopUpM3===0;
 
-  document.getElementById('r-ag-dry').textContent  = Math.round(agDryTotalM3).toLocaleString();
+  document.getElementById('r-ag-dry').textContent   = Math.round(agDryTotalM3).toLocaleString();
   document.getElementById('r-ag-dry-s').textContent = hasTopUp
     ? `Solar ${Math.round(agDrySolarM3).toLocaleString()} + top-up ${Math.round(agDryTopUpM3).toLocaleString()} m³`
     : `${agPump.flow} m³/h × ${dryPsh} PSH × ${dryDays} days`;
-
-  document.getElementById('r-ag-wet').textContent  = Math.round(agWetTotalM3).toLocaleString();
+  document.getElementById('r-ag-wet').textContent   = Math.round(agWetTotalM3).toLocaleString();
   document.getElementById('r-ag-wet-s').textContent = hasTopUp
     ? `Solar ${Math.round(agWetSolarM3).toLocaleString()} + top-up ${Math.round(agWetTopUpM3).toLocaleString()} m³`
     : `${agPump.flow} m³/h × ${wetPsh} PSH × ${wetDays} days`;
-
   document.getElementById('r-ag-annual').textContent   = Math.round(agAnnualM3).toLocaleString();
   document.getElementById('r-ag-annual-s').textContent = hasTopUp ? 'Solar + grid top-up m³/year' : 'm³/year';
 
@@ -833,32 +831,25 @@ function calculate() {
     document.getElementById('r-co-wet-s').textContent = `${compFlowVal} m³/h × ${wetCompHrs} hrs × ${wetDays} days`;
     document.getElementById('r-co-annual').textContent= Math.round(compAnnualM3).toLocaleString();
 
-    const dDiff = agDryTotalM3  - compDryM3;
-    const wDiff = agWetTotalM3  - compWetM3;
-    const aDiff = agAnnualM3    - compAnnualM3;
-
     if (hasTopUp) {
-      // Output is matched — show neutral "matched" cards
-      ['r-diff-dry-card','r-diff-wet-card','r-diff-annual-card'].forEach(id =>
-        document.getElementById(id).className = 'm neutral');
+      ['r-diff-dry-card','r-diff-wet-card','r-diff-annual-card'].forEach(id=>document.getElementById(id).className='m neutral');
       document.getElementById('r-diff-dry').textContent    = 'matched';
       document.getElementById('r-diff-wet').textContent    = 'matched';
       document.getElementById('r-diff-annual').textContent = 'matched';
     } else {
-      setCard('r-diff-dry-card',    'r-diff-dry',    dDiff, 'm³ dry season');
-      setCard('r-diff-wet-card',    'r-diff-wet',    wDiff, 'm³ wet season');
-      setCard('r-diff-annual-card', 'r-diff-annual', aDiff, 'm³/year');
+      setCard('r-diff-dry-card',    'r-diff-dry',    agDryTotalM3-compDryM3,    'm³ dry season');
+      setCard('r-diff-wet-card',    'r-diff-wet',    agWetTotalM3-compWetM3,    'm³ wet season');
+      setCard('r-diff-annual-card', 'r-diff-annual', agAnnualM3-compAnnualM3,   'm³/year');
     }
 
-    // Hybrid output note
     const noteEl = document.getElementById('r-hybrid-note');
     if (hasTopUp) {
       noteEl.style.display = '';
       noteEl.className     = 'callout-blue';
       noteEl.textContent   =
-        `⚡ Hybrid active — solar covers ${hybridDryCovPct}% of daily water need in dry season, `+
-        `${hybridWetCovPct}% in wet season. Grid top-up: ${dryTopUpHrsPD.toFixed(1)} hrs/day dry, `+
-        `${wetTopUpHrsPD.toFixed(1)} hrs/day wet. Total water delivered matches competitor.`;
+        `⚡ Hybrid active — solar covers ${hybridDryCovPct}% dry / ${hybridWetCovPct}% wet of daily water need. `+
+        `Grid top-up: ${dryTopUpHrsPD.toFixed(1)} hrs/day dry, ${wetTopUpHrsPD.toFixed(1)} hrs/day wet. `+
+        `Total water delivered matches competitor.`;
     } else if (fullSolar) {
       noteEl.style.display = '';
       noteEl.className     = 'callout-blue';
@@ -867,44 +858,38 @@ function calculate() {
       noteEl.style.display = 'none';
     }
 
-    // Cost per 1,000 m³
-    document.getElementById('r-co-m3k').textContent = compM3k ? fmtDec(compM3k * fx, 1, cur) : '—';
-    document.getElementById('r-ag-m3k').textContent = agM3k   ? fmtDec(agM3k   * fx, 1, cur) : '—';
+    document.getElementById('r-co-m3k').textContent = compM3k ? fmtDec(compM3k*fx,1,cur) : '—';
+    document.getElementById('r-ag-m3k').textContent = agM3k   ? fmtDec(agM3k*fx,1,cur)   : '—';
 
-    // Extra land — only when hybrid is NOT active with top-up
-    if (!isNaN(landHa) && landHa > 0 && !hasTopUp) {
+    if (!isNaN(landHa) && landHa>0 && !hasTopUp) {
       const ratio   = (agPump.flow - compFlowVal) / compFlowVal;
       const extraHa = landHa * ratio;
-      document.getElementById('r-land-cur').textContent     = landHa.toFixed(1) + ' ha';
-      document.getElementById('r-land-extra').textContent   = (extraHa >= 0 ? '+' : '') + extraHa.toFixed(2) + ' ha';
-      document.getElementById('r-land-extra-s').textContent = `${(ratio*100 >= 0 ? '+' : '')}${(ratio*100).toFixed(0)}% more flow`;
-      document.getElementById('r-land-total').textContent   = (landHa + extraHa).toFixed(2) + ' ha';
+      document.getElementById('r-land-cur').textContent     = landHa.toFixed(1)+' ha';
+      document.getElementById('r-land-extra').textContent   = (extraHa>=0?'+':'')+extraHa.toFixed(2)+' ha';
+      document.getElementById('r-land-extra-s').textContent = `${(ratio*100>=0?'+':'')}${(ratio*100).toFixed(0)}% more flow`;
+      document.getElementById('r-land-total').textContent   = (landHa+extraHa).toFixed(2)+' ha';
       document.getElementById('land-section').style.display = '';
     } else {
       document.getElementById('land-section').style.display = 'none';
     }
-
     document.getElementById('flow-section').style.display = '';
   } else {
-    // No competitor flow — show Agros only, competitor columns blank
     document.getElementById('r-co-dry').textContent    = '— (enter flow)';
     document.getElementById('r-co-dry-s').textContent  = '';
     document.getElementById('r-co-wet').textContent    = '—';
     document.getElementById('r-co-wet-s').textContent  = '';
     document.getElementById('r-co-annual').textContent = '—';
-    ['r-diff-dry','r-diff-wet','r-diff-annual'].forEach(id =>
-      document.getElementById(id).textContent = '—');
-    ['r-diff-dry-card','r-diff-wet-card','r-diff-annual-card'].forEach(id =>
-      document.getElementById(id).className = 'm');
+    ['r-diff-dry','r-diff-wet','r-diff-annual'].forEach(id=>document.getElementById(id).textContent='—');
+    ['r-diff-dry-card','r-diff-wet-card','r-diff-annual-card'].forEach(id=>document.getElementById(id).className='m');
     document.getElementById('r-hybrid-note').style.display = 'none';
     document.getElementById('r-co-m3k').textContent = '— (enter competitor flow)';
-    document.getElementById('r-ag-m3k').textContent = agM3k ? fmtDec(agM3k * fx, 1, cur) : '—';
+    document.getElementById('r-ag-m3k').textContent = agM3k ? fmtDec(agM3k*fx,1,cur) : '—';
     document.getElementById('land-section').style.display  = 'none';
     document.getElementById('flow-section').style.display  = '';
   }
 
   document.getElementById('results').style.display = '';
-  document.getElementById('results').scrollIntoView({behavior:'smooth', block:'start'});
+  document.getElementById('results').scrollIntoView({behavior:'smooth',block:'start'});
 }
 </script>
 </body>
